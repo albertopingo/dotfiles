@@ -1,0 +1,35 @@
+#!bin/bash
+
+# set -euo pipefail
+set -e # Exit on error
+set -u # Exit on undefined variable
+set -o pipefail # Return the exit status of the last command in the pipeline that failed
+set -x # Debug mode
+
+echo "Starting system setup..."
+
+# Update system and install necessary packages
+sudo pacman -Syu --noconfirm
+sudo pacman -S --needed --noconfirm git curl base-devel ansible
+
+( # Subshell
+    # Configure Git
+    printf "Enter your GitHub username: \n"
+    read github_username < /dev/tty
+
+    printf "Enter your GitHub email: \n"
+    read github_email < /dev/tty
+
+    git config --global user.name "$github_username"
+    git config --global user.email "$github_email"
+)
+
+# echo github_username and github_email for debugging purposes
+echo "GitHub Username: $github_username"
+echo "GitHub Email: $github_email"
+
+# Clone the dotfiles repository
+git clone https://github.com/albertopingo/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+
+echo "System setup complete."
