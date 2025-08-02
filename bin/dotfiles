@@ -24,12 +24,19 @@ sudo pacman -S --needed --noconfirm git curl base-devel ansible
     git config --global user.email "$github_email"
 )
 
-# echo github_username and github_email for debugging purposes
-echo "GitHub Username: $github_username"
-echo "GitHub Email: $github_email"
-
 # Clone the dotfiles repository
 git clone https://github.com/albertopingo/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
+
+# Install yay
+if ! command -v yay &> /dev/null; then
+    echo "Installing yay..."
+    git clone https://aur.archlinux.org/yay.git /tmp/yay
+    cd /tmp/yay
+    makepkg -si --noconfirm
+    rm -rf /tmp/yay
+else
+    echo "yay is already installed."
+fi
 
 echo "System setup complete."
