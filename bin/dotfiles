@@ -14,7 +14,7 @@
 set -e # Exit on error
 set -u # Exit on undefined variable
 set -o pipefail # Return the exit status of the last command in the pipeline that failed
-set -x # Debug mode
+# set -x # Debug mode
 
 # ==============================================================================
 # CONSTANTS & GLOBAL VARIABLES
@@ -139,10 +139,43 @@ setup_ansible_galaxy() {
 }
 
 # ==============================================================================
+# COMMAND LINE ARGUMENTS
+# ==============================================================================
+
+cmd_help() {
+    echo "Usage: dotfiles [ansible-playbook options]"
+    echo "Options:"
+    echo "  --help, -h        Show this help message"
+    echo "  --tags, -t TAGS   Run specific roles (comma-separated)"
+    echo "  --check, -C       Perform a dry run (check mode)"
+    echo "  --verbose, -v     Increase verbosity (can be repeated for more verbosity)"
+    echo "  --list-tags       List all available roles"
+}
+
+ansible_args=()
+args_parse() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --help|-h)
+                cmd_help
+                exit 0
+                ;;
+            *)
+                ansible_args+=("$1")
+                shift
+                ;;
+        esac
+    done
+}
+
+# ==============================================================================
 # MAIN EXECUTION
 # ==============================================================================
 
 main() {
+    # Parse command line arguments
+    args_parse "$@"
+
     print_info "Starting dotfiles setup..."
 
     local distro=$(detect_distro)
@@ -178,7 +211,7 @@ main() {
         exit 1
     fi
 
-    ansible-playbook "$DOTFILES_DIR/playbook.yml"
+    ansible-playbook --inventory "$DOTFILES_DIR/inventory.ini" "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}"
 
     if is_first_run; then
         print_info "This is the first run. Marking first run complete."
