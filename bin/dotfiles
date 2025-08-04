@@ -6,6 +6,7 @@
 # This script is intended to be run on a fresh Linux installation.
 # Supports: Arch.
 # Planned support for Debian, Fedora, etc.
+# Local test command: bash ./bin/dotfiles --help
 
 # ==============================================================================
 # SHELL OPTIONS & ERROR HANDLING
