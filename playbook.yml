@@ -5,6 +5,7 @@
 
   vars:
     default_roles:
+      - neovim
 
   tasks:
     - name: Set roles
