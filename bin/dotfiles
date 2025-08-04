@@ -120,6 +120,24 @@ setup_dotfiles_repo() {
     fi
 }
 
+setup_ansible_galaxy() {
+    print_info "Setting up Ansible Galaxy roles..."
+    if ! command -v ansible-galaxy &> /dev/null; then
+        print_error "Ansible is not installed. Please install Ansible first."
+        exit 1
+    fi
+
+    local distro = $1
+    if [ -f "$DOTFILES_DIR/requirements/$distro.yml" ]; then
+        print_info "Using Ansible requirements file for $distro"
+        ansible-galaxy install -r "$DOTFILES_DIR/requirements/$distro.yml"
+    else
+        print_warning "No specific requirements file found for $distro."
+    fi
+
+    ansible-galaxy install -r "$DOTFILES_DIR/requirements/common.yml"
+}
+
 # ==============================================================================
 # MAIN EXECUTION
 # ==============================================================================
@@ -131,7 +149,7 @@ main() {
     print_info "Detected distribution: $distro"
 
     case "$distro" in
-        arch | manjaro)
+        arch )
             print_info "Setting up for Arch Linux..."
             setup_arch
             ;;
@@ -151,6 +169,16 @@ main() {
 
     setup_git_config
     setup_dotfiles_repo
+
+    setup_ansible_galaxy "$distro"
+
+    print_info "Running Ansible playbook..."
+    if ! command -v ansible-playbook &> /dev/null; then
+        print_error "Ansible is not installed. Please install Ansible first."
+        exit 1
+    fi
+
+    ansible-playbook "$DOTFILES_DIR/playbook.yml"
 
     if is_first_run; then
         print_info "This is the first run. Marking first run complete."
