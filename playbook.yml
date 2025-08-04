@@ -1,0 +1,9 @@
+---
+- name: System Automation and Dotfiles Management
+  hosts: local
+  connection: local
+
+  vars:
+    default_roles:
+
+  tasks:
