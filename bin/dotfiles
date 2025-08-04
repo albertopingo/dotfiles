@@ -128,7 +128,7 @@ setup_ansible_galaxy() {
         exit 1
     fi
 
-    local distro = $1
+    local distro=$1
     if [ -f "$DOTFILES_DIR/requirements/$distro.yml" ]; then
         print_info "Using Ansible requirements file for $distro"
         ansible-galaxy install -r "$DOTFILES_DIR/requirements/$distro.yml"
