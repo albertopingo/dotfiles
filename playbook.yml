@@ -3,10 +3,6 @@
   hosts: local
   connection: local
 
-  vars:
-    default_roles:
-      - neovim
-
   tasks:
     - name: Set roles
       ansible.builtin.set_fact:
