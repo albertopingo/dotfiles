@@ -73,7 +73,7 @@ setup_arch() {
     sudo pacman -Syu --noconfirm
 
     # Install essential packages
-    sudo pacman -S --needed --noconfirm git curl base-devel ansible
+    sudo pacman -S --noconfirm --needed git curl base-devel ansible
 
     # Install yay
     if ! command -v yay &> /dev/null; then
@@ -81,6 +81,7 @@ setup_arch() {
         git clone https://aur.archlinux.org/yay.git /tmp/yay
         cd /tmp/yay
         makepkg -si --noconfirm
+        cd ~
         rm -rf /tmp/yay
     fi
 }
@@ -174,6 +175,8 @@ args_parse() {
 # ==============================================================================
 
 main() {
+    sudo -v
+
     # Parse command line arguments
     args_parse "$@"
 
@@ -203,7 +206,6 @@ main() {
 
     setup_git_config
     setup_dotfiles_repo
-
     setup_ansible_galaxy "$distro"
 
     print_info "Running Ansible playbook..."
