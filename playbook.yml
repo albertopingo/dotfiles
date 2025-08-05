@@ -4,6 +4,22 @@
   connection: local
 
   tasks:
+    - name: Create the `aur_builder` user
+      become: true
+      ansible.builtin.user:
+        name: aur_builder
+        create_home: true
+        group: wheel
+
+    - name: Allow the `aur_builder` user to run `sudo pacman` without a password
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/11-install-aur_builder
+        line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+        create: true
+        mode: 0644
+        validate: 'visudo -cf %s'
+
     - name: Set roles
       ansible.builtin.set_fact:
         run_roles: "{{ (ansible_run_tags | list != ['all'] and ansible_run_tags | list or default_roles | difference(exclude_roles | default([])) | sort) }}"
