@@ -31,6 +31,8 @@ readonly BLUE='\033[0;34m'
 readonly YELLOW='\033[1;33m'
 readonly NC='\033[0m' # No Color
 
+ansible_args=()
+
 # ==============================================================================
 # UTILITY FUNCTIONS
 # ==============================================================================
@@ -87,20 +89,12 @@ setup_arch() {
 }
 
 setup_git_config() {
-    print_info "Setting up Git..."
-    # Check if Git is installed
-    if ! command -v git &> /dev/null; then
-        print_error "Git is not installed. Please install Git first."
-        exit 1
-    fi
-
     if git config --global user.name &> /dev/null && git config --global user.email &> /dev/null; then
         print_info "Git is already configured"
         return 0
     fi
 
     print_info "Configuring Git..."
-
     printf "Enter your Git username: "
     read -r git_username < /dev/tty
     printf "Enter your Git email: "
@@ -124,10 +118,6 @@ setup_dotfiles_repo() {
 
 setup_ansible_galaxy() {
     print_info "Setting up Ansible Galaxy roles..."
-    if ! command -v ansible-galaxy &> /dev/null; then
-        print_error "Ansible is not installed. Please install Ansible first."
-        exit 1
-    fi
 
     local distro=$1
     if [ -f "$DOTFILES_DIR/requirements/$distro.yml" ]; then
@@ -154,7 +144,6 @@ cmd_help() {
     echo "  --list-tags       List all available roles"
 }
 
-ansible_args=()
 args_parse() {
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -174,19 +163,21 @@ args_parse() {
 # MAIN EXECUTION
 # ==============================================================================
 
-main() {
-    sudo -v
+sudo -v
 
-    # Parse command line arguments
-    args_parse "$@"
+args_parse "$@"
 
+if is_first_run; then
+    print_info "This is the first run."
     print_info "Starting dotfiles setup..."
 
-    local distro=$(detect_distro)
-    print_info "Detected distribution: $distro"
+    setup_git_config
 
+    distro=$(detect_distro)
+
+    print_info "Detected distribution: $distro"
     case "$distro" in
-        arch )
+        arch)
             print_info "Setting up for Arch Linux..."
             setup_arch
             ;;
@@ -204,25 +195,15 @@ main() {
             ;;
     esac
 
-    setup_git_config
     setup_dotfiles_repo
     setup_ansible_galaxy "$distro"
 
-    print_info "Running Ansible playbook..."
-    if ! command -v ansible-playbook &> /dev/null; then
-        print_error "Ansible is not installed. Please install Ansible first."
-        exit 1
-    fi
+    print_info "Marking first run setup as complete..."
+    mark_first_run_complete
+else
+    print_info "Skipping first run setup."
+    setup_dotfiles_repo
+fi
 
-    ansible-playbook --inventory "$DOTFILES_DIR/inventory.ini" "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}"
-
-    if is_first_run; then
-        print_info "This is the first run. Marking first run complete."
-        mark_first_run_complete
-    else
-        print_info "This is not the first run. Skipping first run setup."
-    fi
-}
-
-# Run the main function
-main "$@"
+print_info "Running Ansible playbook..."
+ansible-playbook --inventory "$DOTFILES_DIR/inventory.ini" "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}" --ask-become-pass
