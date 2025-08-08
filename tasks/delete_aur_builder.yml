@@ -1,0 +1,16 @@
+---
+- name: Delete 'aur_builder' user
+  when: ansible_distribution == "Archlinux"
+  become: true
+  ansible.builtin.user:
+    name: aur_builder
+    state: absent
+    remove: true
+    force: true
+
+- name: Remove sudoers file for 'aur_builder'
+  when: ansible_distribution == "Archlinux"
+  become: true
+  ansible.builtin.file:
+    path: /etc/sudoers.d/11-install-aur_builder
+    state: absent
