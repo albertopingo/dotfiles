@@ -1,0 +1,44 @@
+---
+- name: Install Nvidia packages
+  community.general.pacman:
+    name:
+      - nvidia
+      - nvidia-utils
+      - nvidia-settings
+      - lib32-nvidia-utils
+      - libva-nvidia-driver
+    state: present
+
+- name: Create nvidia application profiles directory
+  ansible.builtin.file:
+    path: /etc/nvidia/nvidia-application-profiles-rc.d
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Deploy Wayland compositor VRAM optimization profile
+  ansible.builtin.copy:
+    src: 50-limit-free-buffer-pool-in-wayland-compositors.json
+    dest: /etc/nvidia/nvidia-application-profiles-rc.d/50-limit-free-buffer-pool-in-wayland-compositors.json
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Add NVIDIA modules to mkinitcpio for early loading
+  ansible.builtin.lineinfile:
+    path: /etc/mkinitcpio.conf
+    regexp: '^MODULES='
+    line: 'MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)'
+    backup: true
+  become: true
+  notify: regenerate initramfs
+
+- name: Install pacman hook for automatic initramfs regeneration
+  ansible.builtin.copy:
+    src: nvidia.hook
+    dest: /etc/pacman.d/hooks/nvidia.hook
+    owner: root
+    group: root
+    mode: '0644'
+  become: true

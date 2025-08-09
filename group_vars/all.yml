@@ -1,2 +1,5 @@
+core_roles:
+  - nvidia
+
 default_roles:
   - neovim

@@ -1,0 +1,4 @@
+---
+- name: "{{ role_name }} | Include distro-specific tasks: {{ ansible_distribution }}"
+  ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
+  ignore_errors: true

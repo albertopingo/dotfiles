@@ -9,6 +9,13 @@
       tags:
         - always
 
+    - name: Run core_roles
+      ansible.builtin.include_role:
+        name: "{{ core_item }}"
+      loop: "{{ core_roles }}"
+      tags:
+        - always
+
     - name: Set roles
       ansible.builtin.set_fact:
         run_roles: "{{ (ansible_run_tags | list != ['all'] and ansible_run_tags | list or default_roles | difference(exclude_roles | default([])) | sort) }}"
