@@ -42,3 +42,60 @@
     group: root
     mode: '0644'
   become: true
+
+# -------------------
+# - Hybrid Graphics
+# -------------------
+
+- name: Detect if system has integrated GPU (hybrid graphics)
+  ansible.builtin.shell: lspci -d ::0300 | wc -l
+  register: gpu_count
+  changed_when: false
+
+- name: Set hybrid graphics fact
+  ansible.builtin.set_fact:
+    has_hybrid_graphics: "{{ gpu_count.stdout | int > 1 }}"
+
+- name: Install nvidia-prime for hybrid graphics systems
+  community.general.pacman:
+    name: nvidia-prime
+    state: present
+  when: has_hybrid_graphics
+
+- name: Enable NVIDIA power management for hybrid graphics
+  ansible.builtin.copy:
+    content: |
+      # Enable runtime PM for NVIDIA VGA/3D controller devices on adding device
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="auto"
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="auto"
+
+      # Enable runtime PM for NVIDIA VGA/3D controller devices on driver bind
+      ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="auto"
+      ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="auto"
+
+      # Disable runtime PM for NVIDIA VGA/3D controller devices on driver unbind
+      ACTION=="unbind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="on"
+      ACTION=="unbind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="on"
+    dest: /etc/udev/rules.d/80-nvidia-pm.rules
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  when: has_hybrid_graphics
+
+- name: Configure NVIDIA dynamic power management
+  ansible.builtin.copy:
+    content: 'options nvidia "NVreg_DynamicPowerManagement=0x02"'
+    dest: /etc/modprobe.d/nvidia-pm.conf
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  when: has_hybrid_graphics
+
+- name: Enable nvidia-persistenced service for hybrid graphics
+  ansible.builtin.systemd:
+    name: nvidia-persistenced.service
+    enabled: yes
+  become: true
+  when: has_hybrid_graphics
