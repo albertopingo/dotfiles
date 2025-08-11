@@ -18,8 +18,6 @@
 
 - name: Update pacman database after enabling multilib
   ansible.builtin.shell: pacman -Sy --noconfirm
-  args:
-    warn: false
   become: true
 
 - name: Install Nvidia packages
