@@ -1,0 +1,11 @@
+---
+- name: Install Niri packages
+  community.general.pacman:
+    name:
+      - xdg-desktop-portal-gnome
+      - xwayland-satellite
+      - niri
+      - org.freedesktop.secrets
+      - mako
+      - fuzzel
+    state: present
