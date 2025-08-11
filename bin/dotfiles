@@ -127,7 +127,7 @@ setup_ansible_galaxy() {
         print_warning "No specific requirements file found for $distro."
     fi
 
-    ansible-galaxy install -r "$DOTFILES_DIR/requirements/common.yml"
+    sudo ansible-galaxy install -r "$DOTFILES_DIR/requirements/common.yml"
 }
 
 # ==============================================================================
