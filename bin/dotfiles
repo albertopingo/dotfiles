@@ -171,8 +171,6 @@ if is_first_run; then
     print_info "This is the first run."
     print_info "Starting dotfiles setup..."
 
-    setup_git_config
-
     distro=$(detect_distro)
 
     print_info "Detected distribution: $distro"
@@ -195,6 +193,7 @@ if is_first_run; then
             ;;
     esac
 
+    setup_git_config
     setup_dotfiles_repo
     setup_ansible_galaxy "$distro"
 
