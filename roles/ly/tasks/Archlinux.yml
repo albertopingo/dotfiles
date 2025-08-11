@@ -11,8 +11,8 @@
     enabled: true
   become: true
 
-- name: "Ly | Start service"
-  ansible.builtin.systemd:
-    name: ly.service
-    state: started
-  become: true
+# - name: "Ly | Start service"
+#   ansible.builtin.systemd:
+#     name: ly.service
+#     state: started
+#   become: true
