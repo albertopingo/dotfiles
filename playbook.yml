@@ -11,8 +11,13 @@
 
     - name: Run core_roles
       ansible.builtin.include_role:
+        apply:
+          tags:
+            - "{{ core_item }}"
         name: "{{ core_item }}"
-      loop: "{{ core_roles }}"
+      loop_control:
+        loop_var: core_item
+      with_items: "{{ core_roles }}"
       tags:
         - always
 

@@ -1,4 +1,27 @@
 ---
+- name: Uncomment [multilib] repo in pacman.conf
+  ansible.builtin.lineinfile:
+    path: /etc/pacman.conf
+    regexp: '^#\[multilib\]'
+    line: '[multilib]'
+    state: present
+  become: true
+
+- name: Uncomment Include line for multilib in pacman.conf
+  ansible.builtin.lineinfile:
+    path: /etc/pacman.conf
+    regexp: '^#Include = /etc/pacman.d/mirrorlist'
+    line: 'Include = /etc/pacman.d/mirrorlist'
+    insertafter: '^\[multilib\]'
+    state: present
+  become: true
+
+- name: Update pacman database after enabling multilib
+  ansible.builtin.shell: pacman -Sy --noconfirm
+  args:
+    warn: false
+  become: true
+
 - name: Install Nvidia packages
   community.general.pacman:
     name:
@@ -34,6 +57,15 @@
   become: true
   notify: regenerate initramfs
 
+- name: Ensure pacman hooks directory exists
+  ansible.builtin.file:
+    path: /etc/pacman.d/hooks
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+
 - name: Install pacman hook for automatic initramfs regeneration
   ansible.builtin.copy:
     src: nvidia.hook
@@ -48,7 +80,7 @@
 # -------------------
 
 - name: Detect if system has integrated GPU (hybrid graphics)
-  ansible.builtin.shell: lspci -d ::0300 | wc -l
+  ansible.builtin.shell: lspci -d ::03xx | wc -l
   register: gpu_count
   changed_when: false
 
