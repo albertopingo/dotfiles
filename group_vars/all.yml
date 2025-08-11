@@ -1,6 +1,8 @@
 core_roles:
   - nvidia
   - ly
+  - niri
 
 default_roles:
+  - wezterm
   - neovim
