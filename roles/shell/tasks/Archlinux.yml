@@ -1,0 +1,7 @@
+---
+- name: Install Terminal packages
+  community.general.pacman:
+    name:
+      - zsh
+      - fastfetch
+    state: present

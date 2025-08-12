@@ -1,0 +1,27 @@
+---
+- name: "{{ role_name }} | Checking for Distribution Config: {{ ansible_distribution }}"
+  ansible.builtin.stat:
+    path: "{{ role_path }}/tasks/{{ ansible_distribution }}.yml"
+  register: distribution_config
+
+- name: "{{ role_name }} | Run Tasks: {{ ansible_distribution }}"
+  ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
+  when: distribution_config.stat.exists
+
+# ------------------
+# Zsh configuration
+# ------------------
+
+- name: "Setup Zsh configuration file"
+  ansible.builtin.include_tasks: "../../../tasks/file_symlink.yml"
+  vars:
+    app_name: "Zsh"
+    file_name: ".zshrc"
+    src_path: "{{ role_path }}/files/zsh/.zshrc"
+    dest_path: "{{ ansible_user_dir }}/.zshrc"
+
+- name: "Zsh | Set zsh as default shell"
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  become: true
