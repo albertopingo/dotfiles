@@ -1,7 +1,10 @@
 core_roles:
   - nvidia
+  - assets
   - ly
   - niri
+  - quickshell
+  - shell
 
 default_roles:
   - wezterm
