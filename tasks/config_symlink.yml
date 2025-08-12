@@ -1,0 +1,28 @@
+---
+- name: "{{ app_name }} | Check if {{ config_dir_name }} config exists"
+  ansible.builtin.stat:
+    path: "{{ ansible_user_dir }}/.config/{{ config_dir_name }}"
+  register: config_stat
+
+- name: "{{ app_name }} | Backup existing config if not a symlink"
+  when:
+    - config_stat.stat.exists
+    - not config_stat.stat.islnk
+  ansible.builtin.command:
+    cmd: "mv {{ ansible_user_dir }}/.config/{{ config_dir_name }} {{ ansible_user_dir }}/.config/{{ config_dir_name }}.backup-{{ ansible_date_time.epoch }}"
+  args:
+    creates: "{{ ansible_user_dir }}/.config/{{ config_dir_name }}.backup-{{ ansible_date_time.epoch }}"
+
+- name: "{{ app_name }} | Config folder"
+  ansible.builtin.file:
+    mode: "0755"
+    path: "{{ ansible_user_dir }}/.config/{{ config_dir_name }}"
+    state: directory
+  when: not config_stat.stat.exists or not config_stat.stat.islnk
+
+- name: "{{ app_name }} | Create symlink to role files directory"
+  ansible.builtin.file:
+    src: "{{ role_path }}/files/{{ src_subdir | default(config_dir_name) }}"
+    dest: "{{ ansible_user_dir }}/.config/{{ config_dir_name }}"
+    state: link
+    force: true
