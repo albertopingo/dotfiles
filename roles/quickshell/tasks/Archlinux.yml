@@ -1,0 +1,7 @@
+---
+- name: "Quickshell | {{ ansible_distribution }} | Install Quickshell"
+  kewlfft.aur.aur:
+    name: quickshell
+    state: present
+  become: true
+  become_user: aur_builder
