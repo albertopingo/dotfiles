@@ -26,6 +26,13 @@
     state: present
   become: true
 
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install Symbola font"
+  kewlfft.aur.aur:
+    name: ttf-symbola
+    state: present
+  become: true
+  become_user: aur_builder
+
 - name: "{{ role_name }} | {{ ansible_distribution }} | Create fontconfig directory"
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.config/fontconfig/conf.d"
