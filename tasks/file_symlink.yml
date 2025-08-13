@@ -18,7 +18,7 @@
     mode: "0755"
     path: "{{ dest_path }}"
     state: directory
-  when: not config_stat.stat.exists or not config_stat.stat.islnk or is_dir
+  when: not config_stat.stat.exists or not config_stat.stat.islnk or is_dir | default(false)
 
 - name: "{{ app_name }} | Create symlink for {{ file_name }}"
   ansible.builtin.file:
