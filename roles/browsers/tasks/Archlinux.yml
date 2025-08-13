@@ -1,0 +1,16 @@
+---
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install browsers"
+  community.general.pacman:
+    name:
+      - firefox
+    state: present
+  become: true
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install AUR browsers"
+  kewlfft.aur.aur:
+    name:
+      - zen-browser-bin
+      - brave-bin
+    state: present
+  become: true
+  become_user: aur_builder

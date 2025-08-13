@@ -10,3 +10,4 @@ core_roles:
 default_roles:
   - wezterm
   - neovim
+  - browsers
