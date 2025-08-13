@@ -12,6 +12,7 @@
     cmd: "mv {{ dest_path }} {{ dest_path }}.backup-{{ ansible_date_time.epoch }}"
   args:
     creates: "{{ dest_path }}.backup-{{ ansible_date_time.epoch }}"
+  become: true
 
 - name: "{{ app_name }} | Config folder if is_dir = true"
   ansible.builtin.file:
@@ -19,6 +20,7 @@
     path: "{{ dest_path }}"
     state: directory
   when: not config_stat.stat.exists or not config_stat.stat.islnk or is_dir | default(false)
+  become: true
 
 - name: "{{ app_name }} | Create symlink for {{ file_name }}"
   ansible.builtin.file:
@@ -26,3 +28,4 @@
     dest: "{{ dest_path }}"
     state: link
     force: true
+  become: true
