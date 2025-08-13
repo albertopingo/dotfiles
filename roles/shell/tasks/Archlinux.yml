@@ -2,8 +2,14 @@
 - name: Install Terminal packages
   community.general.pacman:
     name:
+      - ttf-jetbrains-mono
+      - ttf-jetbrains-mono-nerd
       - zsh
       - fzf
       - fastfetch
     state: present
+  become: true
+
+- name: Refresh font cache
+  command: fc-cache -fv
   become: true
