@@ -3,7 +3,6 @@
   community.general.pacman:
     name: ly
     state: present
-  become: true
 
 - name: "Ly | Enable service"
   ansible.builtin.systemd:

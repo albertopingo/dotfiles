@@ -127,7 +127,7 @@ setup_ansible_galaxy() {
         print_warning "No specific requirements file found for $distro."
     fi
 
-    sudo ansible-galaxy install -r "$DOTFILES_DIR/requirements/common.yml"
+    ansible-galaxy install -r "$DOTFILES_DIR/requirements/common.yml"
 }
 
 # ==============================================================================
@@ -204,5 +204,5 @@ else
 fi
 
 print_info "Running Ansible playbook..."
-sudo ansible-playbook --inventory "$DOTFILES_DIR/inventory.ini" "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}" --ask-become-pass
+ansible-playbook --inventory "$DOTFILES_DIR/inventory.ini" "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}" --ask-become-pass
 mark_first_run_complete

@@ -3,5 +3,6 @@
   community.general.pacman:
     name:
       - zsh
+      - fzf
       - fastfetch
     state: present
