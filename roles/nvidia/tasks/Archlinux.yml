@@ -29,6 +29,7 @@
       - lib32-nvidia-utils
       - libva-nvidia-driver
     state: present
+  become: true
 
 - name: Create nvidia application profiles directory
   ansible.builtin.file:
@@ -91,6 +92,7 @@
     name: nvidia-prime
     state: present
   when: has_hybrid_graphics
+  become: true
 
 - name: Enable NVIDIA power management for hybrid graphics
   ansible.builtin.copy:

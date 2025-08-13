@@ -10,3 +10,4 @@
       - fuzzel
       - hyprpaper
     state: present
+  become: true

@@ -6,3 +6,4 @@
       - fzf
       - fastfetch
     state: present
+  become: true

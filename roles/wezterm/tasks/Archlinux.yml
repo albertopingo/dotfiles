@@ -4,3 +4,4 @@
     name:
       - wezterm
     state: present
+  become: true
