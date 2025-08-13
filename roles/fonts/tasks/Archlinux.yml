@@ -28,7 +28,9 @@
 
 - name: "{{ role_name }} | {{ ansible_distribution }} | Install Symbola font"
   kewlfft.aur.aur:
-    name: ttf-symbola
+    name:
+      - ttf-symbola
+      - ttf-material-symbols-variable-git # quickshell - Ly-sec/Noctalia
     state: present
   become: true
   become_user: aur_builder
