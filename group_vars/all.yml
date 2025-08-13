@@ -1,6 +1,7 @@
 core_roles:
   - nvidia
   - assets
+  - fonts
   - ly
   - niri
   - quickshell
