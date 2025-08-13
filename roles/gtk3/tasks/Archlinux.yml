@@ -1,0 +1,7 @@
+---
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install browsers"
+  community.general.pacman:
+    name:
+      - gtk3
+    state: present
+  become: true
