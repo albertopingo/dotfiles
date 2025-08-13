@@ -1,5 +1,5 @@
 ---
-- name: Uncomment [multilib] repo in pacman.conf
+- name: "{{ role_name }} | {{ ansible_distribution }} | Uncomment [multilib] repo in pacman.conf"
   ansible.builtin.lineinfile:
     path: /etc/pacman.conf
     regexp: '^#\[multilib\]'
@@ -7,7 +7,7 @@
     state: present
   become: true
 
-- name: Uncomment Include line for multilib in pacman.conf
+- name: "{{ role_name }} | {{ ansible_distribution }} | Uncomment Include line for multilib in pacman.conf"
   ansible.builtin.lineinfile:
     path: /etc/pacman.conf
     regexp: '^#Include = /etc/pacman.d/mirrorlist'
@@ -16,11 +16,11 @@
     state: present
   become: true
 
-- name: Update pacman database after enabling multilib
+- name: "{{ role_name }} | {{ ansible_distribution }} | Update pacman database after enabling multilib"
   ansible.builtin.shell: pacman -Sy --noconfirm
   become: true
 
-- name: Install Nvidia packages
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install Nvidia packages"
   community.general.pacman:
     name:
       - nvidia
@@ -31,14 +31,14 @@
     state: present
   become: true
 
-- name: Create nvidia application profiles directory
+- name: "{{ role_name }} | {{ ansible_distribution }} | Create nvidia application profiles directory"
   ansible.builtin.file:
     path: /etc/nvidia/nvidia-application-profiles-rc.d
     state: directory
     mode: '0755'
   become: true
 
-- name: Deploy Wayland compositor VRAM optimization profile
+- name: "{{ role_name }} | {{ ansible_distribution }} | Deploy Wayland compositor VRAM optimization profile"
   ansible.builtin.copy:
     src: 50-limit-free-buffer-pool-in-wayland-compositors.json
     dest: /etc/nvidia/nvidia-application-profiles-rc.d/50-limit-free-buffer-pool-in-wayland-compositors.json
@@ -47,7 +47,7 @@
     mode: '0644'
   become: true
 
-- name: Add NVIDIA modules to mkinitcpio for early loading
+- name: "{{ role_name }} | {{ ansible_distribution }} | Add NVIDIA modules to mkinitcpio for early loading"
   ansible.builtin.lineinfile:
     path: /etc/mkinitcpio.conf
     regexp: '^MODULES='
@@ -56,7 +56,7 @@
   become: true
   notify: regenerate initramfs
 
-- name: Ensure pacman hooks directory exists
+- name: "{{ role_name }} | {{ ansible_distribution }} | Ensure pacman hooks directory exists"
   ansible.builtin.file:
     path: /etc/pacman.d/hooks
     state: directory
@@ -65,7 +65,7 @@
     mode: '0755'
   become: true
 
-- name: Install pacman hook for automatic initramfs regeneration
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install pacman hook for automatic initramfs regeneration"
   ansible.builtin.copy:
     src: nvidia.hook
     dest: /etc/pacman.d/hooks/nvidia.hook
@@ -78,23 +78,23 @@
 # - Hybrid Graphics
 # -------------------
 
-- name: Detect if system has integrated GPU (hybrid graphics)
+- name: "{{ role_name }} | {{ ansible_distribution }} | Detect if system has integrated GPU (hybrid graphics)"
   ansible.builtin.shell: lspci -d ::03xx | wc -l
   register: gpu_count
   changed_when: false
 
-- name: Set hybrid graphics fact
+- name: "{{ role_name }} | {{ ansible_distribution }} | Set hybrid graphics fact"
   ansible.builtin.set_fact:
     has_hybrid_graphics: "{{ gpu_count.stdout | int > 1 }}"
 
-- name: Install nvidia-prime for hybrid graphics systems
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install nvidia-prime for hybrid graphics systems"
   community.general.pacman:
     name: nvidia-prime
     state: present
   when: has_hybrid_graphics
   become: true
 
-- name: Enable NVIDIA power management for hybrid graphics
+- name: "{{ role_name }} | {{ ansible_distribution }} | Enable NVIDIA power management for hybrid graphics"
   ansible.builtin.copy:
     content: |
       # Enable runtime PM for NVIDIA VGA/3D controller devices on adding device
@@ -115,7 +115,7 @@
   become: true
   when: has_hybrid_graphics
 
-- name: Configure NVIDIA dynamic power management
+- name: "{{ role_name }} | {{ ansible_distribution }} | Configure NVIDIA dynamic power management"
   ansible.builtin.copy:
     content: 'options nvidia "NVreg_DynamicPowerManagement=0x02"'
     dest: /etc/modprobe.d/nvidia-pm.conf
@@ -125,7 +125,7 @@
   become: true
   when: has_hybrid_graphics
 
-- name: Enable nvidia-persistenced service for hybrid graphics
+- name: "{{ role_name }} | {{ ansible_distribution }} | Enable nvidia-persistenced service for hybrid graphics"
   ansible.builtin.systemd:
     name: nvidia-persistenced.service
     enabled: yes

@@ -8,7 +8,7 @@
   ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
   when: distribution_config.stat.exists
 
-- name: "Setup WezTerm configuration"
+- name: "{{ role_name }} | Setup configuration"
   ansible.builtin.include_tasks: "../../../tasks/config_symlink.yml"
   vars:
     app_name: "WezTerm"

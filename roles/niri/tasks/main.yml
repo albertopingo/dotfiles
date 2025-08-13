@@ -8,14 +8,14 @@
   ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
   when: distribution_config.stat.exists
 
-- name: "Setup Niri configuration"
+- name: "{{ role_name }} | Setup Niri configuration"
   ansible.builtin.include_tasks: "../../../tasks/config_symlink.yml"
   vars:
     app_name: "Niri"
     config_dir_name: "niri"
     src_subdir: "niri"
 
-- name: "Setup Hyprpaper configuration"
+- name: "{{ role_name }} | Setup Hyprpaper configuration"
   ansible.builtin.include_tasks: "../../../tasks/config_symlink.yml"
   vars:
     app_name: "Hyprpaper"
