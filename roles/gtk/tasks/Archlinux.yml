@@ -40,16 +40,10 @@
     - "gtk3.tar.gz"
     - "gtk4.tar.gz"
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Create icons directory"
-  ansible.builtin.file:
-    path: "{{ build_dir.path }}/icons"
-    state: directory
-    mode: '0755'
-
 - name: "{{ role_name }} | {{ ansible_distribution }} | Extract icon archives"
   ansible.builtin.unarchive:
     src: "{{ build_dir.path }}/{{ item }}"
-    dest: "{{ build_dir.path }}/icons"
+    dest: "{{ build_dir.path }}"
     remote_src: yes
   loop:
     - "rose-pine-icons.tar.gz"
@@ -72,11 +66,8 @@
   become: true
 
 - name: "{{ role_name }} | {{ ansible_distribution }} | Install GTK themes"
-  ansible.builtin.copy:
-    src: "{{ build_dir.path }}/gtk3/{{ item }}/"
-    dest: "/usr/share/themes/{{ item }}/"
-    mode: '0644'
-    directory_mode: '0755'
+  ansible.builtin.command:
+    cmd: "mv {{ build_dir.path }}/gtk3/{{ item }} /usr/share/themes/{{ item }}"
   loop:
     - "rose-pine-gtk"
     - "rose-pine-moon-gtk"
@@ -91,11 +82,8 @@
   become: true
 
 - name: "{{ role_name }} | {{ ansible_distribution }} | Install icon themes"
-  ansible.builtin.copy:
-    src: "{{ build_dir.path }}/icons/{{ item }}/"
-    dest: "/usr/share/icons/{{ item }}/"
-    mode: '0644'
-    directory_mode: '0755'
+  ansible.builtin.command:
+    cmd: "mv {{ build_dir.path }}/icons/{{ item }} /usr/share/icons/{{ item }}"
   loop:
     - "rose-pine-icons"
     - "rose-pine-dawn-icons"
