@@ -1,0 +1,128 @@
+---
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install gtk3"
+  community.general.pacman:
+    name:
+      - gtk3
+      - gtk4
+      - python-psutil
+      - python-gobject
+    state: present
+  become: true
+
+# -------------------------------
+#         Build rose-pine
+# -------------------------------
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Create temporary build directory"
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: rose-pine-build
+  register: build_dir
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Download Rose Pine theme files"
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ build_dir.path }}/{{ item.name }}"
+    mode: '0644'
+  loop:
+    - { url: "https://github.com/rose-pine/gtk/releases/latest/download/gtk3.tar.gz", name: "gtk3.tar.gz" }
+    - { url: "https://github.com/rose-pine/gtk/releases/latest/download/gtk4.tar.gz", name: "gtk4.tar.gz" }
+    - { url: "https://github.com/rose-pine/gtk/releases/latest/download/rose-pine-icons.tar.gz", name: "rose-pine-icons.tar.gz" }
+    - { url: "https://github.com/rose-pine/gtk/releases/latest/download/rose-pine-dawn-icons.tar.gz", name: "rose-pine-dawn-icons.tar.gz" }
+    - { url: "https://github.com/rose-pine/gtk/releases/latest/download/rose-pine-moon-icons.tar.gz", name: "rose-pine-moon-icons.tar.gz" }
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Extract theme archives"
+  ansible.builtin.unarchive:
+    src: "{{ build_dir.path }}/{{ item }}"
+    dest: "{{ build_dir.path }}"
+    remote_src: yes
+  loop:
+    - "gtk3.tar.gz"
+    - "gtk4.tar.gz"
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Create icons directory"
+  ansible.builtin.file:
+    path: "{{ build_dir.path }}/icons"
+    state: directory
+    mode: '0755'
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Extract icon archives"
+  ansible.builtin.unarchive:
+    src: "{{ build_dir.path }}/{{ item }}"
+    dest: "{{ build_dir.path }}/icons"
+    remote_src: yes
+  loop:
+    - "rose-pine-icons.tar.gz"
+    - "rose-pine-dawn-icons.tar.gz"
+    - "rose-pine-moon-icons.tar.gz"
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Build GTK themes"
+  ansible.builtin.shell: |
+    cd "{{ build_dir.path }}"
+    for theme in rose-pine rose-pine-dawn rose-pine-moon; do
+      mkdir -p "gtk3/${theme}-gtk/gtk-4.0"
+      cp "gtk4/${theme}.css" "gtk3/${theme}-gtk/gtk-4.0/gtk.css"
+    done
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Create themes directory"
+  ansible.builtin.file:
+    path: /usr/share/themes
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install GTK themes"
+  ansible.builtin.copy:
+    src: "{{ build_dir.path }}/gtk3/{{ item }}/"
+    dest: "/usr/share/themes/{{ item }}/"
+    mode: '0644'
+    directory_mode: '0755'
+  loop:
+    - "rose-pine-gtk"
+    - "rose-pine-moon-gtk"
+    - "rose-pine-dawn-gtk"
+  become: true
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Create icons directory"
+  ansible.builtin.file:
+    path: /usr/share/icons
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install icon themes"
+  ansible.builtin.copy:
+    src: "{{ build_dir.path }}/icons/{{ item }}/"
+    dest: "/usr/share/icons/{{ item }}/"
+    mode: '0644'
+    directory_mode: '0755'
+  loop:
+    - "rose-pine-icons"
+    - "rose-pine-dawn-icons"
+    - "rose-pine-moon-icons"
+  become: true
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Clean up build directory"
+  ansible.builtin.file:
+    path: "{{ build_dir.path }}"
+    state: absent
+
+# -------------------------------
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Set GNOME color scheme to dark"
+  community.general.dconf:
+    key: "/org/gnome/desktop/interface/color-scheme"
+    value: "'prefer-dark'"
+    state: present
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Set GTK theme to Rose Pine"
+  community.general.dconf:
+    key: "/org/gnome/desktop/interface/gtk-theme"
+    value: "'rose-pine-gtk'"
+    state: present
+
+- name: "{{ role_name }} | {{ ansible_distribution }} | Set icon theme to Rose Pine"
+  community.general.dconf:
+    key: "/org/gnome/desktop/interface/icon-theme"
+    value: "'rose-pine-icons'"
+    state: present
