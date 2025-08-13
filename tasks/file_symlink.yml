@@ -13,6 +13,13 @@
   args:
     creates: "{{ dest_path }}.backup-{{ ansible_date_time.epoch }}"
 
+- name: "{{ app_name }} | Config folder if is_dir = true"
+  ansible.builtin.file:
+    mode: "0755"
+    path: "{{ dest_path }}"
+    state: directory
+  when: not config_stat.stat.exists or not config_stat.stat.islnk or is_dir
+
 - name: "{{ app_name }} | Create symlink for {{ file_name }}"
   ansible.builtin.file:
     src: "{{ src_path }}"
