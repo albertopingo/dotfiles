@@ -6,6 +6,7 @@ core_roles:
   - niri
   - quickshell
   - shell
+  - gtk-4.0
 
 default_roles:
   - wezterm
