@@ -1,6 +1,7 @@
 ---
 - name: "{{ role_name }} | {{ ansible_distribution }} | Install Neovim Nightly"
   kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
     name: neovim-git
     state: present
   become: true

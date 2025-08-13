@@ -1,3 +1,5 @@
+aur_helper: yay
+
 core_roles:
   - nvidia
   - assets

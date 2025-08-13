@@ -8,6 +8,7 @@
 
 - name: "{{ role_name }} | {{ ansible_distribution }} | Install AUR browsers"
   kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
     name:
       - zen-browser-bin
       - brave-bin
