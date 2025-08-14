@@ -6,11 +6,10 @@ local config = {
 	color_scheme = "rose-pine",
 
 	font = wezterm.font("JetBrains Mono"),
-	font_size = 12,
+	font_size = 14,
 	tab_max_width = 4,
 
 	max_fps = 144,
-	prefer_to_spawn_tabs = true
 }
 
 if os_name == "Linux" then
