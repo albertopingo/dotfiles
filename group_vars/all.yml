@@ -14,3 +14,4 @@ default_roles:
   - wezterm
   - neovim
   - browsers
+  - yazi

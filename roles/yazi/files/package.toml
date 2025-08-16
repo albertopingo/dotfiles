@@ -1,0 +1,12 @@
+[plugin]
+deps = []
+
+[[flavor.deps]]
+use = "Mintass/rose-pine"
+rev = "8343340"
+hash = "e2336631865c0f90276dcbc553d532fc"
+
+[[flavor.deps]]
+use = "Mintass/rose-pine-dawn"
+rev = "5c6d353"
+hash = "d9d9463d5d43ced18e18986d05439ace"

@@ -1,0 +1,19 @@
+---
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Install Yazi"
+  community.general.pacman:
+    name:
+      - yazi
+      - 7zip # - archive extraction and preview
+      - chafa # - ASCII image preview as fallback
+      - fd # - file searching
+      - ffmpeg # - video thumbnails
+      - fzf # - quick file subtree navigation
+      - imagemagick # - image and font preview
+      - jq # - JSON preview
+      - poppler # - PDF preview
+      - resvg # - SVG preview
+      - ripgrep # - file content searching
+      - zoxide # - historical directories navigation, requires fzf
+      - wl-clipboard # - Wayland clipboard support
+    state: present
+  become: true
