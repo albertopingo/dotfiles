@@ -8,7 +8,7 @@ core_roles:
   - niri
   - quickshell
   - shell
-  - gtk
+  - gtk_qt
 
 default_roles:
   - wezterm

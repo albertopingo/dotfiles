@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name }} | {{ ansible_distribution }} | Install gtk3"
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install gtk and qt"
   community.general.pacman:
     name:
       - gtk3
@@ -10,6 +10,8 @@
       - sassc
       - gnome-themes-extra
       - rsync
+      - qt5-wayland
+      - qt6-wayland
     state: present
   become: true
 
@@ -214,3 +216,12 @@
     key: "/org/gnome/desktop/interface/icon-theme"
     value: "'rose-pine-icons'"
     state: present
+
+# https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications#QGtk3Style
+- name: "Environment | {{ ansible_distribution }} | Add Qt theming to /etc/environment"
+  ansible.builtin.lineinfile:
+    path: /etc/environment
+    line: "QT_QPA_PLATFORMTHEME=gtk3"
+    create: yes
+    mode: '0644'
+  become: true
