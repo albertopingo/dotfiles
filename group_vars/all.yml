@@ -3,6 +3,7 @@ aur_helper: yay
 core_roles:
   - nvidia
   - assets
+  - audio
   - fonts
   - ly
   - niri
@@ -15,3 +16,4 @@ default_roles:
   - neovim
   - browsers
   - yazi
+  - obs
