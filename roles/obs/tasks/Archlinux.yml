@@ -1,0 +1,9 @@
+---
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Install OBS"
+  community.general.pacman:
+    name:
+      - obs-studio
+      - obs-studio-browser
+      # - v4l2loopback-dkms
+    state: present
+  become: true
