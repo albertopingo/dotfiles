@@ -25,10 +25,10 @@
   ansible.builtin.systemd:
     name: pipewire.service
     enabled: true
-  become: true
+    scope: user
 
 - name: "{{ role_name }} | {{ ansible_distribution }} | Enable wireplumber service"
   ansible.builtin.systemd:
     name: wireplumber.service
     enabled: true
-  become: true
+    scope: user
