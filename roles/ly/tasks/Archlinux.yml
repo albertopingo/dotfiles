@@ -1,7 +1,9 @@
 ---
 - name: "{{ role_name }} | {{ ansible_distribution }} | Install Ly"
   community.general.pacman:
-    name: ly
+    name:
+      - ly
+      - brightnessctl
     state: present
   become: true
 
