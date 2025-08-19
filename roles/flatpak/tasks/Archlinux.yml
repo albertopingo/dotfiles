@@ -1,0 +1,26 @@
+---
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Install Flatpak"
+  community.general.pacman:
+    name:
+      - flatpak
+    state: present
+  become: true
+
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Add the flathub flatpak repository remote to the user installation"
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+    method: system
+
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Add Flathub Beta repository"
+  community.general.flatpak_remote:
+    name: flathub-beta
+    state: present
+    flatpakrepo_url: https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+    method: system
+
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Update flatpak application database"
+  ansible.builtin.command:
+    cmd: flatpak update --appstream
+  changed_when: false

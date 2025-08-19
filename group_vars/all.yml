@@ -10,6 +10,7 @@ core_roles:
   - quickshell
   - shell
   - gtk_qt
+  - flatpak
 
 default_roles:
   - wezterm
