@@ -26,6 +26,10 @@ autoload -U compinit && compinit
 # Vi
 bindkey -v
 
+# Editor
+export EDITOR=nvim
+export VISUAL=nvim
+
 # History
 HISTFILE=~/.histfile
 HISTSIZE=500
