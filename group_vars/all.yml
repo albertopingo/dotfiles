@@ -18,3 +18,4 @@ default_roles:
   - browsers
   - yazi
   - obs
+  - stremio
