@@ -19,3 +19,4 @@ default_roles:
   - yazi
   - obs
   - stremio
+  - vscode

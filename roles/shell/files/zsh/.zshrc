@@ -30,6 +30,9 @@ bindkey -v
 export EDITOR=nvim
 export VISUAL=nvim
 
+# Vscode telemetry
+export DOTNET_CLI_TELEMETRY_OPTOUT=true
+
 # History
 HISTFILE=~/.histfile
 HISTSIZE=500

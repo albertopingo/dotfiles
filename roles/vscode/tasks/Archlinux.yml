@@ -1,0 +1,8 @@
+---
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install Visual Studio Code AUR"
+  kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
+    name: visual-studio-code-bin
+    state: present
+  become: true
+  become_user: aur_builder
