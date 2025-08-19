@@ -7,9 +7,9 @@
   become: true
   become_user: aur_builder
 
-# - name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Install other dependencies"
-#   community.general.pacman:
-#     name:
-#       - v4l2loopback-dkms
-#     state: present
-#   become: true
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Install other dependencies"
+  community.general.pacman:
+    name:
+      - v4l2loopback-dkms
+    state: present
+  become: true
