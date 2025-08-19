@@ -11,16 +11,23 @@
     name: flathub
     state: present
     flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
-    method: system
+    method: "{{ item }}"
+  become: "{{ true if item == 'system' else false }}"
+  loop:
+    - system
+    - user
 
 - name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Add Flathub Beta repository"
   community.general.flatpak_remote:
     name: flathub-beta
     state: present
     flatpakrepo_url: https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-    method: system
+    method: "{{ item }}"
+  become: "{{ true if item == 'system' else false }}"
+  loop:
+    - system
+    - user
 
 - name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Update flatpak application database"
   ansible.builtin.command:
     cmd: flatpak update --appstream
-  changed_when: false
