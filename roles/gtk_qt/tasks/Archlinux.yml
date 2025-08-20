@@ -12,6 +12,7 @@
       - rsync
       - qt5-wayland
       - qt6-wayland
+      - qt5-styleplugins
     state: present
   become: true
 
