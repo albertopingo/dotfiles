@@ -9,5 +9,8 @@
       - mako
       - fuzzel
       - hyprpaper
+      - libsecret
+      - gnome-keyring
+      - seahorse
     state: present
   become: true
