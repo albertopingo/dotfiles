@@ -18,10 +18,10 @@
     app_name: "Zsh"
     file_name: ".zshrc"
     src_path: "{{ role_path }}/files/zsh/.zshrc"
-    dest_path: "{{ ansible_user_dir }}/.zshrc"
+    dest_path: "{{ ansible_facts['user_dir'] }}/.zshrc"
 
 - name: "Main | Set zsh as default shell"
   ansible.builtin.user:
-    name: "{{ ansible_user_id }}"
+    name: "{{ ansible_facts['user_id'] }}"
     shell: /usr/bin/zsh
   become: true

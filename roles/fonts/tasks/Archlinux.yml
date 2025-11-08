@@ -38,7 +38,7 @@
 
 - name: "{{ ansible_facts['distribution'] }} | Create fontconfig directory"
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.config/fontconfig/conf.d"
+    path: "{{ ansible_facts['user_dir'] }}/.config/fontconfig/conf.d"
     state: directory
     mode: '0755'
 
@@ -53,7 +53,7 @@
 - name: "{{ ansible_facts['distribution'] }} | Create symlink for bitmap font disable configuration"
   ansible.builtin.file:
     src: "{{ role_path }}/files/20-no-embedded.conf"
-    dest: "{{ ansible_user_dir }}/.config/fontconfig/conf.d/20-no-embedded.conf"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/fontconfig/conf.d/20-no-embedded.conf"
     state: link
     force: true
 
@@ -83,7 +83,7 @@
 # - name: "{{ ansible_facts['distribution'] }} | Create symlink for .Xresources X11 font settings"
 #   ansible.builtin.file:
 #     src: "{{ role_path }}/files/.Xresources"
-#     dest: "{{ ansible_user_dir }}/.Xresources"
+#     dest: "{{ ansible_facts['user_dir'] }}/.Xresources"
 #     state: link
 #     force: true
 #   register: xresources_created

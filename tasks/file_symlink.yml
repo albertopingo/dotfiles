@@ -9,9 +9,9 @@
     - file_stat.stat.exists
     - not file_stat.stat.islnk
   ansible.builtin.command:
-    cmd: "mv {{ dest_path }} {{ dest_path }}.backup-{{ ansible_date_time.epoch }}"
+    cmd: "mv {{ dest_path }} {{ dest_path }}.backup-{{ ansible_facts['date_time']['epoch'] }}"
   args:
-    creates: "{{ dest_path }}.backup-{{ ansible_date_time.epoch }}"
+    creates: "{{ dest_path }}.backup-{{ ansible_facts['date_time']['epoch'] }}"
   become: true
 
 - name: "{{ app_name }} | Config folder if is_dir = true"

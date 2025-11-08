@@ -40,7 +40,7 @@
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Icons] Check if rose-pine-icons exists in user icons directory"
   ansible.builtin.stat:
-    path: "{{ ansible_user_dir }}/.icons/rose-pine-icons"
+    path: "{{ ansible_facts['user_dir'] }}/.icons/rose-pine-icons"
   register: user_icons_exists
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Icons] Set icons installation needed flag"
@@ -77,7 +77,7 @@
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Icons] Create user icons directory"
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.icons"
+    path: "{{ ansible_facts['user_dir'] }}/.icons"
     state: directory
     mode: '0755'
   when: icons_needs_install
@@ -90,7 +90,7 @@
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Icons] Copy icons to user icons directory"
   ansible.builtin.shell:
-    cmd: "rsync -a {{ icons_build_dir.path }}/icons/rose-pine-icons/ {{ ansible_user_dir }}/.icons/rose-pine-icons/"
+    cmd: "rsync -a {{ icons_build_dir.path }}/icons/rose-pine-icons/ {{ ansible_facts['user_dir'] }}/.icons/rose-pine-icons/"
   when: icons_needs_install
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Icons] Clean up icons build directory"
@@ -117,7 +117,7 @@
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Theme] Check if Rosepine-Dark exists in user themes directory"
   ansible.builtin.stat:
-    path: "{{ ansible_user_dir }}/.themes/Rosepine-Dark"
+    path: "{{ ansible_facts['user_dir'] }}/.themes/Rosepine-Dark"
   register: user_theme_exists
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Theme] Set theme installation needed flag"
@@ -147,7 +147,7 @@
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Theme] Create user themes directory"
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.themes"
+    path: "{{ ansible_facts['user_dir'] }}/.themes"
     state: directory
     mode: '0755'
   when: theme_needs_install
@@ -160,19 +160,19 @@
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Theme] Copy theme to user themes directory"
   ansible.builtin.shell:
-    cmd: "rsync -a {{ theme_build_dir.path }}/Rosepine-Dark {{ ansible_user_dir }}/.themes/"
+    cmd: "rsync -a {{ theme_build_dir.path }}/Rosepine-Dark {{ ansible_facts['user_dir'] }}/.themes/"
   when: theme_needs_install
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Theme] Create user gtk-4.0 config directory"
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.config/gtk-4.0"
+    path: "{{ ansible_facts['user_dir'] }}/.config/gtk-4.0"
     state: directory
     mode: '0755'
   when: theme_needs_install
 
 - name: "{{ ansible_facts['distribution'] }} | Remove existing GTK4 symlinks if they exist"
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.config/gtk-4.0/{{ item }}"
+    path: "{{ ansible_facts['user_dir'] }}/.config/gtk-4.0/{{ item }}"
     state: absent
   loop:
     - assets
@@ -182,8 +182,8 @@
 
 - name: "{{ ansible_facts['distribution'] }} | [GTK Theme] Create GTK4 symlinks to user theme directory"
   ansible.builtin.file:
-    src: "{{ ansible_user_dir }}/.themes/Rosepine-Dark/gtk-4.0/{{ item }}"
-    dest: "{{ ansible_user_dir }}/.config/gtk-4.0/{{ item }}"
+    src: "{{ ansible_facts['user_dir'] }}/.themes/Rosepine-Dark/gtk-4.0/{{ item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/gtk-4.0/{{ item }}"
     state: link
   loop:
     - assets
