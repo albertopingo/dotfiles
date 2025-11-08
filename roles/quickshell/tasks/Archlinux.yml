@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name }} | {{ ansible_distribution }} | Install Quickshell"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [AUR] Install Quickshell"
   kewlfft.aur.aur:
     use: "{{ aur_helper }}"
     name: quickshell

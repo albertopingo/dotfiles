@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name }} | {{ ansible_distribution }} | Install gtk and qt"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install gtk and qt"
   community.general.pacman:
     name:
       - gtk3
@@ -17,45 +17,45 @@
   become: true
 
 # -------------------------------
-#   Install Rose Pine GTK icons
+#   Install Rosepine GTK Icons
 # -------------------------------
 # Source: https://github.com/rose-pine/gtk/releases/latest/download/rose-pine-icons.tar.gz
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Check if rose-pine-icons exists in system icons directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Check if rose-pine-icons exists in system icons directory"
   ansible.builtin.stat:
     path: /usr/share/icons/rose-pine-icons
   register: system_icons_exists
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Check if rose-pine-icons exists in user icons directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Check if rose-pine-icons exists in user icons directory"
   ansible.builtin.stat:
     path: "{{ ansible_user_dir }}/.icons/rose-pine-icons"
   register: user_icons_exists
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Set icons installation needed flag"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Set icons installation needed flag"
   ansible.builtin.set_fact:
     icons_needs_install: "{{ not (system_icons_exists.stat.exists or user_icons_exists.stat.exists) }}"
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Create temporary build directory for icons"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Create temporary build directory for icons"
   ansible.builtin.tempfile:
     state: directory
     suffix: rose-pine-icons-build
   register: icons_build_dir
   when: icons_needs_install
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Download Rose Pine icon files"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Download Rose Pine icon files"
   ansible.builtin.get_url:
     url: "https://github.com/rose-pine/gtk/releases/latest/download/rose-pine-icons.tar.gz"
     dest: "{{ icons_build_dir.path }}/rose-pine-icons.tar.gz"
     mode: '0644'
   when: icons_needs_install
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Extract icon archive"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Extract icon archive"
   ansible.builtin.unarchive:
     src: "{{ icons_build_dir.path }}/rose-pine-icons.tar.gz"
     dest: "{{ icons_build_dir.path }}"
   when: icons_needs_install
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Create system icons directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Create system icons directory"
   ansible.builtin.file:
     path: /usr/share/icons
     state: directory
@@ -63,69 +63,69 @@
   become: true
   when: icons_needs_install
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Create user icons directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Create user icons directory"
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.icons"
     state: directory
     mode: '0755'
   when: icons_needs_install
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Copy icons to system icons directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Copy icons to system icons directory"
   ansible.builtin.shell:
     cmd: "rsync -a {{ icons_build_dir.path }}/icons/rose-pine-icons/ /usr/share/icons/rose-pine-icons/"
   become: true
   when: icons_needs_install
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Copy icons to user icons directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Copy icons to user icons directory"
   ansible.builtin.shell:
     cmd: "rsync -a {{ icons_build_dir.path }}/icons/rose-pine-icons/ {{ ansible_user_dir }}/.icons/rose-pine-icons/"
   when: icons_needs_install
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Clean up icons build directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Clean up icons build directory"
   ansible.builtin.file:
     path: "{{ icons_build_dir.path }}"
     state: absent
   when: icons_needs_install and icons_build_dir is defined
 
-- name: "Rose Pine GTK icons | {{ ansible_distribution }} | Display icons skip message"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Icons] Display icons skip message"
   ansible.builtin.debug:
     msg: "rose-pine-icons already exists, skipping installation"
   when: not icons_needs_install
 
 # -------------------------------
-#   Install Rose Pine GTK Theme
+#   Install Rosepine GTK Theme
 # -------------------------------
 # Source: https://github.com/Fausto-Korpsvart/Rose-Pine-GTK-Theme
 # Pling: https://www.pling.com/p/1810530
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Check if Rosepine-Dark exists in system themes directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Check if Rosepine-Dark exists in system themes directory"
   ansible.builtin.stat:
     path: /usr/share/themes/Rosepine-Dark
   register: system_theme_exists
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Check if Rosepine-Dark exists in user themes directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Check if Rosepine-Dark exists in user themes directory"
   ansible.builtin.stat:
     path: "{{ ansible_user_dir }}/.themes/Rosepine-Dark"
   register: user_theme_exists
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Set theme installation needed flag"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Set theme installation needed flag"
   ansible.builtin.set_fact:
     theme_needs_install: "{{ not (system_theme_exists.stat.exists or user_theme_exists.stat.exists) }}"
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Create temporary build directory for theme"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Create temporary build directory for theme"
   ansible.builtin.tempfile:
     state: directory
     suffix: rose-pine-theme-build
   register: theme_build_dir
   when: theme_needs_install
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Extract Rose Pine theme ZIP"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Extract Rose Pine theme ZIP"
   ansible.builtin.unarchive:
     src: "{{ role_path }}/files/Rosepine-Dark-BL-LB.zip"
     dest: "{{ theme_build_dir.path }}"
   when: theme_needs_install
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Create system themes directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Create system themes directory"
   ansible.builtin.file:
     path: /usr/share/themes
     state: directory
@@ -133,32 +133,32 @@
   become: true
   when: theme_needs_install
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Create user themes directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Create user themes directory"
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.themes"
     state: directory
     mode: '0755'
   when: theme_needs_install
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Copy theme to system themes directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Copy theme to system themes directory"
   ansible.builtin.shell:
     cmd: "rsync -a {{ theme_build_dir.path }}/Rosepine-Dark /usr/share/themes/"
   become: true
   when: theme_needs_install
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Copy theme to user themes directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Copy theme to user themes directory"
   ansible.builtin.shell:
     cmd: "rsync -a {{ theme_build_dir.path }}/Rosepine-Dark {{ ansible_user_dir }}/.themes/"
   when: theme_needs_install
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Create user gtk-4.0 config directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Create user gtk-4.0 config directory"
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.config/gtk-4.0"
     state: directory
     mode: '0755'
   when: theme_needs_install
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Remove existing GTK4 symlinks if they exist"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Remove existing GTK4 symlinks if they exist"
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.config/gtk-4.0/{{ item }}"
     state: absent
@@ -168,7 +168,7 @@
     - gtk-dark.css
   when: theme_needs_install
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Create GTK4 symlinks to user theme directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Create GTK4 symlinks to user theme directory"
   ansible.builtin.file:
     src: "{{ ansible_user_dir }}/.themes/Rosepine-Dark/gtk-4.0/{{ item }}"
     dest: "{{ ansible_user_dir }}/.config/gtk-4.0/{{ item }}"
@@ -179,13 +179,13 @@
     - gtk-dark.css
   when: theme_needs_install
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Clean up theme build directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Clean up theme build directory"
   ansible.builtin.file:
     path: "{{ theme_build_dir.path }}"
     state: absent
   when: theme_needs_install and theme_build_dir is defined
 
-- name: "Rose Pine GTK Theme | {{ ansible_distribution }} | Display theme skip message"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [GTK Theme] Display theme skip message"
   ansible.builtin.debug:
     msg: "Rosepine-Dark theme already exists, skipping installation"
   when: not theme_needs_install
@@ -194,32 +194,32 @@
 #    Configure GNOME settings
 # -------------------------------
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Set GNOME color scheme to dark"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Set GNOME color scheme to dark"
   community.general.dconf:
     key: "/org/gnome/desktop/interface/color-scheme"
     value: "'prefer-dark'"
     state: present
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Set window manager theme to Rose Pine"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Set window manager theme to Rose Pine"
   community.general.dconf:
     key: "/org/gnome/desktop/wm/preferences/theme"
     value: "'Rosepine-Dark'"
     state: present
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Set GTK theme to Rose Pine"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Set GTK theme to Rose Pine"
   community.general.dconf:
     key: "/org/gnome/desktop/interface/gtk-theme"
     value: "'Rosepine-Dark'"
     state: present
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Set icon theme to Rose Pine"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Set icon theme to Rose Pine"
   community.general.dconf:
     key: "/org/gnome/desktop/interface/icon-theme"
     value: "'rose-pine-icons'"
     state: present
 
 # https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications#QGtk3Style
-- name: "Environment | {{ ansible_distribution }} | Add Qt theming to /etc/environment"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Add Qt theming to /etc/environment"
   ansible.builtin.lineinfile:
     path: /etc/environment
     line: "QT_QPA_PLATFORMTHEME=gtk3"

@@ -1,6 +1,6 @@
 ---
 # Based on the info @ https://github.com/davgar99/arch-linux-font-improvement-guide
-- name: "{{ role_name }} | {{ ansible_distribution }} | Install fonts"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install fonts"
   community.general.pacman:
     name:
       # Core Noto fonts
@@ -26,7 +26,7 @@
     state: present
   become: true
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Install Symbola font"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Symbola font"
   kewlfft.aur.aur:
     use: "{{ aur_helper }}"
     name:
@@ -36,13 +36,13 @@
   become: true
   become_user: aur_builder
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Create fontconfig directory"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Create fontconfig directory"
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.config/fontconfig/conf.d"
     state: directory
     mode: '0755'
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Create symlink for global font configuration"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Create symlink for global font configuration"
   ansible.builtin.file:
     src: "{{ role_path }}/files/local.conf"
     dest: /etc/fonts/local.conf
@@ -50,14 +50,14 @@
     force: true
   become: true
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Create symlink for bitmap font disable configuration"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Create symlink for bitmap font disable configuration"
   ansible.builtin.file:
     src: "{{ role_path }}/files/20-no-embedded.conf"
     dest: "{{ ansible_user_dir }}/.config/fontconfig/conf.d/20-no-embedded.conf"
     state: link
     force: true
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Create symbolic links for font rendering"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Create symbolic links for font rendering"
   ansible.builtin.file:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -72,7 +72,7 @@
     - src: /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf
       dest: /etc/fonts/conf.d/11-lcdfilter-default.conf
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Configure freetype2 subpixel rendering"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Configure freetype2 subpixel rendering"
   ansible.builtin.lineinfile:
     path: /etc/profile.d/freetype2.sh
     regexp: '^#export FREETYPE_PROPERTIES'
@@ -80,7 +80,7 @@
     backup: true
   become: true
 
-# - name: "{{ role_name }} | {{ ansible_distribution }} | Create symlink for .Xresources X11 font settings"
+# - name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Create symlink for .Xresources X11 font settings"
 #   ansible.builtin.file:
 #     src: "{{ role_path }}/files/.Xresources"
 #     dest: "{{ ansible_user_dir }}/.Xresources"
@@ -88,11 +88,11 @@
 #     force: true
 #   register: xresources_created
 
-# - name: "{{ role_name }} | {{ ansible_distribution }} | Apply .Xresources settings"
+# - name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Apply .Xresources settings"
 #   ansible.builtin.command: xrdb -merge ~/.Xresources
 #   when: xresources_created is changed
 #   ignore_errors: true
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Refresh font cache"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Refresh font cache"
   ansible.builtin.command: fc-cache -fv
   become: true

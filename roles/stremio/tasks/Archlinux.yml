@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Install Stremio Beta flatpak"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [Flatpak] Install Stremio Beta"
   community.general.flatpak:
     name: com.stremio.Stremio
     state: present

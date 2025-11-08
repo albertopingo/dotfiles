@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name }} | {{ ansible_distribution }} | Install Ly"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Ly"
   community.general.pacman:
     name:
       - ly
@@ -7,14 +7,8 @@
     state: present
   become: true
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Enable service"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Enable service"
   ansible.builtin.systemd:
     name: ly.service
     enabled: true
   become: true
-
-# - name: "{{ role_name }} | {{ ansible_distribution }} | Start service"
-#   ansible.builtin.systemd:
-#     name: ly.service
-#     state: started
-#   become: true

@@ -1,7 +1,7 @@
 ---
 # https://www.siberoloji.com/how-to-stream-audio-with-obs-on-arch-linux/
 #
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Install audio"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install audio packages"
   community.general.pacman:
     name:
       - pipewire
@@ -21,13 +21,13 @@
     state: present
   become: true
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Enable pipewire service"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Enable pipewire service"
   ansible.builtin.systemd:
     name: pipewire.service
     enabled: true
     scope: user
 
-- name: "{{ role_name }} | {{ ansible_distribution }} | Enable wireplumber service"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Enable wireplumber service"
   ansible.builtin.systemd:
     name: wireplumber.service
     enabled: true

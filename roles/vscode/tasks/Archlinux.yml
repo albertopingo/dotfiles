@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name }} | {{ ansible_distribution }} | Install Visual Studio Code AUR"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [AUR] Install Visual Studio Code"
   kewlfft.aur.aur:
     use: "{{ aur_helper }}"
     name: visual-studio-code-bin

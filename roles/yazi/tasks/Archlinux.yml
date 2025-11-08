@@ -1,8 +1,14 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution | replace('linux', '') }} | Install Yazi"
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Yazi"
   community.general.pacman:
     name:
       - yazi
+    state: present
+  become: true
+
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Yazi optional dependencies"
+  community.general.pacman:
+    name:
       - 7zip # - archive extraction and preview
       - chafa # - ASCII image preview as fallback
       - fd # - file searching
