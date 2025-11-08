@@ -197,8 +197,6 @@ if is_first_run; then
     setup_dotfiles_repo
     setup_ansible_galaxy "$distro"
 
-    print_info "Running Ansible playbook..."
-    ansible-playbook --inventory "$DOTFILES_DIR/inventory.ini" "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}" --ask-become-pass
 
     print_info "Marking first run setup as complete..."
     mark_first_run_complete
@@ -207,7 +205,7 @@ else
 
     setup_dotfiles_repo
     setup_ansible_galaxy "$distro"
-
-    print_info "Running Ansible playbook..."
-    ansible-playbook --inventory "$DOTFILES_DIR/inventory.ini" "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}" --ask-become-pass
 fi
+
+print_info "Running Ansible playbook..."
+ansible-playbook --inventory "$DOTFILES_DIR/inventory.ini" "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}" --ask-become-pass

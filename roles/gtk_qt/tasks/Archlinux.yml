@@ -2,19 +2,31 @@
 - name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install gtk and qt"
   community.general.pacman:
     name:
+      - gtk2
       - gtk3
       - gtk4
       - python-psutil
       - python-gobject
-      - gtk-engine-murrine
+      # - gtk-engine-murrine
       - sassc
       - gnome-themes-extra
       - rsync
       - qt5-wayland
       - qt6-wayland
-      - qt5-styleplugins
+      # - qt5-styleplugins
+      - unzip # Needed for extracting Rosepine-Dark-BL-LB.zip Rosepine theme
     state: present
   become: true
+
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [AUR] Install other dependencies"
+  kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
+    name:
+      # - gtk-engine-murrine # For gtk2 themes that required the Murrine Engine - 1 No longer in official repos
+      - qt5-styleplugins   # 1
+    state: present
+  become: true
+  become_user: aur_builder
 
 # -------------------------------
 #   Install Rosepine GTK Icons

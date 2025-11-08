@@ -7,6 +7,7 @@
     - name: Create 'aur_builder' user
       ansible.builtin.import_tasks: tasks/create_aur_builder.yml
       register: aur_builder_user
+      tags: always
 
     # Examples:
     # Run all: ./bin/dotfiles
@@ -15,6 +16,7 @@
     - name: Set roles
       ansible.builtin.set_fact:
         run_roles: "{{ (ansible_run_tags | list != ['all'] and ansible_run_tags | list or default_roles | difference(exclude_roles | default([])) | sort) }}"
+      tags: always # Always run even when selecting specific roles
 
     - name: Run roles
       ansible.builtin.include_role:
@@ -25,8 +27,9 @@
       loop_control:
         loop_var: roles_item
       with_items: "{{ run_roles }}"
+      tags: always
 
   post_tasks:
     - name: Delete 'aur_builder' user
       ansible.builtin.import_tasks: tasks/delete_aur_builder.yml
-      when: aur_builder_user.stat.exists
+      tags: always
