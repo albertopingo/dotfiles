@@ -167,11 +167,11 @@ sudo -v
 
 args_parse "$@"
 
+distro=$(detect_distro)
+
 if is_first_run; then
     print_info "This is the first run."
     print_info "Starting dotfiles setup..."
-
-    distro=$(detect_distro)
 
     print_info "Detected distribution: $distro"
     case "$distro" in
@@ -208,4 +208,4 @@ else
 fi
 
 print_info "Running Ansible playbook..."
-ansible-playbook --inventory "$DOTFILES_DIR/inventory.ini" "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}" --ask-become-pass
+ansible-playbook "$DOTFILES_DIR/playbook.yml" "${ansible_args[@]}" --ask-become-pass

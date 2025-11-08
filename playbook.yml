@@ -1,6 +1,6 @@
 ---
 - name: System Automation and Dotfiles Management
-  hosts: local
+  hosts: localhost
   connection: local
 
   tasks:
