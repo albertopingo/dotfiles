@@ -1,4 +1,34 @@
 ---
+# -------------------------------
+#   Pacman
+# -------------------------------
+
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Pacman Config - Uncomment Color option"
+  ansible.builtin.replace:
+    path: /etc/pacman.conf
+    regexp: '^#Color$'
+    replace: 'Color'
+    backup: yes
+  become: true
+
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Pacman Config - Uncomment VerbosePkgLists option"
+  ansible.builtin.replace:
+    path: /etc/pacman.conf
+    regexp: '^#VerbosePkgLists$'
+    replace: 'VerbosePkgLists'
+  become: true
+
+- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Pacman Config - Add ILoveCandy option"
+  ansible.builtin.lineinfile:
+    path: /etc/pacman.conf
+    insertafter: '^Color$'
+    line: 'ILoveCandy'
+    state: present
+  become: true
+
+# -------------------------------
+#   Flatpak
+# -------------------------------
 - name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Flatpak"
   community.general.pacman:
     name:
