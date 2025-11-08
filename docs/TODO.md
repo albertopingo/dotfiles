@@ -19,7 +19,7 @@
 
 - [ ] Nix Development enviroments
 
-- [ ] Brightness control - https://github.com/YaLTeR/niri/discussions/364
+- [x] Brightness control - https://github.com/YaLTeR/niri/discussions/364
 
 ## Security and Privacy
 
