@@ -1,22 +1,30 @@
 aur_helper: yay
 
-core_roles:
+default_roles:
+# System
   - nvidia
-  - assets
   - audio
   - fonts
+  - shell
   - ly
+
+# Desktop Environment
+  - assets
   - niri
   - quickshell
-  - shell
   - gtk_qt
+  - wezterm
+
+# Package Managers
   - flatpak
 
-default_roles:
-  - wezterm
+# TUI applications
   - neovim
-  - browsers
   - yazi
+  - opencode
+
+# GUI applications
+  - browsers
   - obs
-  - stremio
+  # - stremio
   - vscode
