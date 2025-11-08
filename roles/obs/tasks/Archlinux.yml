@@ -13,3 +13,21 @@
       - v4l2loopback-dkms
     state: present
   become: true
+
+
+- name: "{{ ansible_facts['distribution'] }} | Find .desktop files containing V4L2"
+  shell: grep -l "V4L2" /usr/share/applications/*.desktop 2>/dev/null || true
+  register: desktop_files
+  changed_when: false
+
+- name: "{{ ansible_facts['distribution'] }} | Hide V4L2 .desktop files"
+  community.general.ini_file:
+    path: "{{ item }}"
+    section: "Desktop Entry"
+    option: "Hidden"
+    value: "true"
+    no_extra_spaces: yes
+  loop: "{{ desktop_files.stdout_lines }}"
+  when: desktop_files.stdout_lines | length > 0 and lookup('file', item) is not search('Hidden=')
+  become: yes
+

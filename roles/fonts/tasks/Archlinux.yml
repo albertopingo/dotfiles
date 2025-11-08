@@ -96,3 +96,15 @@
 - name: "{{ ansible_facts['distribution'] }} | Refresh font cache"
   ansible.builtin.command: fc-cache -fv
   become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Hide Fontforge .desktop file"
+  community.general.ini_file:
+    path: "{{ item }}"
+    section: "Desktop Entry"
+    option: "Hidden"
+    value: "true"
+    no_extra_spaces: yes
+  with_fileglob:
+    - /usr/share/applications/*fontforge*.desktop
+  when: lookup('file', item) is not search('Hidden=')
+  become: yes
