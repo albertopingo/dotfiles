@@ -1,11 +1,10 @@
 ---
-- name: "{{ role_name }} | {{ ansible_distribution }} | Install Neovim Nightly"
-  kewlfft.aur.aur:
-    use: "{{ aur_helper }}"
-    name: neovim-git
+- name: "{{ role_name }} | {{ ansible_distribution }} | Install Neovim"
+  community.general.pacman:
+    name:
+      - neovim
     state: present
   become: true
-  become_user: aur_builder
 
 - name: "{{ role_name }} | {{ ansible_distribution }} | Set Neovim as default editor in /etc/environment"
   ansible.builtin.lineinfile:

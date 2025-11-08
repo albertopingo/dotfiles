@@ -38,3 +38,6 @@ vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
+
+-- Requires wl-clipboard on Wayland
+vim.opt.clipboard:append("unnamedplus")
