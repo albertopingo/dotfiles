@@ -9,8 +9,8 @@
 
 ## Apps and utility
 
-- [ ] Fast OCR - Image to text. One click like printscreen and zone selection - https://github.com/dynobo/normcap
-    - What Keybinds?
+- [x] Fast OCR - Image to text. One click like printscreen and zone selection - https://github.com/dynobo/normcap
+    - [ ] What Keybinds?
 
 - [ ] Self-host:
     - Docker, Podman, Portainer - ?
