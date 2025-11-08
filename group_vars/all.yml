@@ -1,3 +1,4 @@
+# https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#splitting-out-vars
 aur_helper: yay
 
 default_roles:
