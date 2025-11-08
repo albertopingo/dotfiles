@@ -1,6 +1,6 @@
 ---
 - name: Create the `aur_builder` user
-  when: ansible_distribution == "Archlinux"
+  when: ansible_facts['distribution'] == "Archlinux"
   become: true
   ansible.builtin.user:
     name: aur_builder
@@ -8,7 +8,7 @@
     group: wheel
 
 - name: Allow the `aur_builder` user to run `sudo pacman` without a password
-  when: ansible_distribution == "Archlinux"
+  when: ansible_facts['distribution'] == "Archlinux"
   become: true
   ansible.builtin.lineinfile:
     path: /etc/sudoers.d/11-install-aur_builder
