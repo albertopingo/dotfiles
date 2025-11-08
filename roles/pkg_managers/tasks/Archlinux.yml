@@ -3,7 +3,7 @@
 #   Pacman
 # -------------------------------
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Pacman Config - Uncomment Color option"
+- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Uncomment Color option"
   ansible.builtin.replace:
     path: /etc/pacman.conf
     regexp: '^#Color$'
@@ -11,14 +11,14 @@
     backup: yes
   become: true
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Pacman Config - Uncomment VerbosePkgLists option"
+- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Uncomment VerbosePkgLists option"
   ansible.builtin.replace:
     path: /etc/pacman.conf
     regexp: '^#VerbosePkgLists$'
     replace: 'VerbosePkgLists'
   become: true
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Pacman Config - Add ILoveCandy option"
+- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Add ILoveCandy option"
   ansible.builtin.lineinfile:
     path: /etc/pacman.conf
     insertafter: '^Color$'
@@ -29,14 +29,14 @@
 # -------------------------------
 #   Flatpak
 # -------------------------------
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Flatpak"
+- name: "{{ ansible_facts['distribution'] }} | Install Flatpak"
   community.general.pacman:
     name:
       - flatpak
     state: present
   become: true
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Add the Flathub repository"
+- name: "{{ ansible_facts['distribution'] }} | Add the Flathub repository"
   community.general.flatpak_remote:
     name: flathub
     state: present
@@ -47,7 +47,7 @@
     - system
     - user
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Add Flathub Beta repository"
+- name: "{{ ansible_facts['distribution'] }} | Add Flathub Beta repository"
   community.general.flatpak_remote:
     name: flathub-beta
     state: present
@@ -58,6 +58,6 @@
     - system
     - user
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Update flatpak application database"
+- name: "{{ ansible_facts['distribution'] }} | Update flatpak application database"
   ansible.builtin.command:
     cmd: flatpak update --appstream

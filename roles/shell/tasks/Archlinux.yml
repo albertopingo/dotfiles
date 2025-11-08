@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Shell packages"
+- name: "{{ ansible_facts['distribution'] }} | Install Shell packages"
   community.general.pacman:
     name:
       - zsh

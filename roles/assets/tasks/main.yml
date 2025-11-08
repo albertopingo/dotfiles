@@ -1,4 +1,4 @@
-- name: "{{ role_name | capitalize }} | Setup Assets Symlink"
+- name: "Main | Setup Assets Symlink"
   ansible.builtin.include_tasks: "../../../tasks/config_symlink.yml"
   vars:
     app_name: "Assets"

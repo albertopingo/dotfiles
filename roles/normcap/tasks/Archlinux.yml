@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [Flatpak] Install NormCap OCR"
+- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install NormCap OCR"
   community.general.flatpak:
     name: com.github.dynobo.normcap
     state: present

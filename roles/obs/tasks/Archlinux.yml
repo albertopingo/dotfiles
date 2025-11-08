@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [AUR] Install OBS Studio"
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install OBS Studio"
   kewlfft.aur.aur:
     use: "{{ aur_helper }}"
     name: obs-studio-git
@@ -7,7 +7,7 @@
   become: true
   become_user: aur_builder
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install OBS Studio dependencies"
+- name: "{{ ansible_facts['distribution'] }} | Install OBS Studio dependencies"
   community.general.pacman:
     name:
       - v4l2loopback-dkms

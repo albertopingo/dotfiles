@@ -1,12 +1,12 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Firefox"
+- name: "{{ ansible_facts['distribution'] }} | Install Firefox"
   community.general.pacman:
     name:
       - firefox
     state: present
   become: true
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [AUR] Install Zen Browser and Brave"
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install Zen Browser and Brave"
   kewlfft.aur.aur:
     use: "{{ aur_helper }}"
     name:

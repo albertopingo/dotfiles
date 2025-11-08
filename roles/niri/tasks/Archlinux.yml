@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Niri"
+- name: "{{ ansible_facts['distribution'] }} | Install Niri"
   community.general.pacman:
     name:
       - xdg-desktop-portal-gnome

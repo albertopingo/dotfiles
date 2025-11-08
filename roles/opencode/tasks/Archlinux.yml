@@ -1,5 +1,5 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | [AUR] Install OpenCode"
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install OpenCode"
   kewlfft.aur.aur:
     use: "{{ aur_helper }}"
     name: opencode-bin

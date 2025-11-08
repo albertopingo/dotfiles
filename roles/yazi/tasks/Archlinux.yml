@@ -1,12 +1,12 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Yazi"
+- name: "{{ ansible_facts['distribution'] }} | Install Yazi"
   community.general.pacman:
     name:
       - yazi
     state: present
   become: true
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Yazi optional dependencies"
+- name: "{{ ansible_facts['distribution'] }} | Install Yazi optional dependencies"
   community.general.pacman:
     name:
       - 7zip # - archive extraction and preview

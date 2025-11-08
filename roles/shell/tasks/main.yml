@@ -1,10 +1,10 @@
 ---
-- name: "{{ role_name | capitalize }} | Checking for {{ ansible_distribution }} Config"
+- name: "Main | Checking for {{ ansible_distribution }} Config"
   ansible.builtin.stat:
     path: "{{ role_path }}/tasks/{{ ansible_distribution }}.yml"
   register: distribution_config
 
-- name: "{{ role_name | capitalize }} | Run {{ ansible_distribution }} Tasks"
+- name: "Main | Run {{ ansible_distribution }} Tasks"
   ansible.builtin.include_tasks: "{{ ansible_distribution }}.yml"
   when: distribution_config.stat.exists
 
@@ -12,7 +12,7 @@
 # Zsh configuration
 # ------------------
 
-- name: "{{ role_name | capitalize }} | Setup Zsh Config Symlink"
+- name: "Main | Setup Zsh Config Symlink"
   ansible.builtin.include_tasks: "../../../tasks/file_symlink.yml"
   vars:
     app_name: "Zsh"
@@ -20,7 +20,7 @@
     src_path: "{{ role_path }}/files/zsh/.zshrc"
     dest_path: "{{ ansible_user_dir }}/.zshrc"
 
-- name: "{{ role_name | capitalize }} | Set zsh as default shell"
+- name: "Main | Set zsh as default shell"
   ansible.builtin.user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh

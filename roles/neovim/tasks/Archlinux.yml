@@ -1,12 +1,12 @@
 ---
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Install Neovim"
+- name: "{{ ansible_facts['distribution'] }} | Install Neovim"
   community.general.pacman:
     name:
       - neovim
     state: present
   become: true
 
-- name: "{{ role_name | capitalize }} | {{ ansible_distribution }} | Set Neovim as default editor in /etc/environment"
+- name: "{{ ansible_facts['distribution'] }} | Set Neovim as default editor in /etc/environment"
   ansible.builtin.lineinfile:
     path: /etc/environment
     line: "{{ item }}"
