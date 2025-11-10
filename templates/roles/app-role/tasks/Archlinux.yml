@@ -1,0 +1,29 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install App_Name"
+  community.general.pacman:
+    name:
+      - App_Name
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Install App_Name optional dependencies"
+  community.general.pacman:
+    name:
+      - dependency1
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install App_Name"
+  kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
+    name: App_Name
+    state: present
+  become: true
+  become_user: aur_builder
+
+- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install App_Name"
+  community.general.flatpak:
+    name: com.example.appname
+    state: present
+    method: user
+    remote: flathub
