@@ -1,0 +1,4 @@
+---
+- name: Debug
+  ansible.builtin.debug:
+    msg: "This is a test role."
