@@ -13,11 +13,10 @@
 # ------------------
 
 - name: "Main | Setup Zsh Config Symlink"
-  ansible.builtin.include_tasks: "../../../tasks/file_symlink.yml"
+  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
   vars:
-    app_name: "Zsh"
-    file_name: ".zshrc"
-    src_path: "{{ role_path }}/files/zsh/.zshrc"
+    app_name: Zsh
+    src_subpath: .zshrc
     dest_path: "{{ ansible_facts['user_dir'] }}/.zshrc"
 
 - name: "Main | Set zsh as default shell"

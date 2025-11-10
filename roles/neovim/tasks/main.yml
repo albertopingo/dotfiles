@@ -9,7 +9,7 @@
   when: distribution_config.stat.exists
 
 - name: "Main | Setup Neovim Config Symlink"
-  ansible.builtin.include_tasks: "../../../tasks/config_symlink.yml"
+  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
   vars:
-    app_name: "Neovim"
-    config_dir_name: "nvim"
+    app_name: Neovim
+    dest_path: "{{ ansible_facts['user_dir'] }}/.config/nvim"

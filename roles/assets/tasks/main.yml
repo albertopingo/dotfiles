@@ -1,5 +1,5 @@
 - name: "Main | Setup Assets Symlink"
-  ansible.builtin.include_tasks: "../../../tasks/config_symlink.yml"
+  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
   vars:
-    app_name: "Assets"
-    config_dir_name: "assets"
+    app_name: Assets
+    dest_path: "{{ ansible_facts['user_dir'] }}/.config/assets"

@@ -1,0 +1,90 @@
+---
+# Description:
+#   Deploys application configuration files as symbolic links from the role's files
+#   directory to target locations in the user's home directory. Handles both single
+#   file configurations and multi-file directory structures.
+#
+# Behavior:
+#   - Creates a symlink from role files to the specified destination
+#   - Automatically backs up existing non-symlink configurations with timestamp
+#   - Overwrites existing symlinks with force: true
+#
+# Parameters:
+#   app_name (string, required): Application name used in task output and logging
+#     Example: "Neovim", "Zsh", "Tmux"
+#
+#   src_subpath (string, optional): Relative path within the role's files/ directory to the config source
+#     Default: "" (empty, links entire files/ directory)
+#     - Specify filename for single file configs (e.g., ".zshrc")
+#     - Specify subdirectory for nested configs (e.g., "niri/files/niri" or "niri/files/hypr")
+#
+#   dest_path (string, required): Absolute path where the symlink will be created
+#     Example: "{{ ansible_facts['user_dir'] }}/.config/nvim"
+#              "{{ ansible_facts['user_dir'] }}/.zshrc"
+
+- name: "{{ app_name }} | Set source path"
+  ansible.builtin.set_fact:
+    src_path: "{{ role_path }}/files/{{ src_subpath | default('') }}"
+
+- name: "{{ app_name }} | Debug deployment variables"
+  ansible.builtin.debug:
+    msg:
+      - "Application: {{ app_name }}"
+      - "Source path: {{ src_path }}"
+      - "Destination path: {{ dest_path }}"
+
+- name: "{{ app_name }} | Get destination path status"
+  ansible.builtin.stat:
+    path: "{{ dest_path }}"
+  register: config_stat
+
+- name: "{{ app_name }} | Backup existing configuration"
+  ansible.builtin.command:
+    cmd: "mv {{ dest_path }} {{ dest_path }}.backup.{{ ansible_date_time.epoch }}"
+  when:
+    - config_stat.stat.exists
+    - not config_stat.stat.islnk
+
+- name: "{{ app_name }} | Ensure parent directory exists"
+  ansible.builtin.file:
+    path: "{{ dest_path | dirname }}"
+    state: directory
+    mode: '0755'
+
+- name: "{{ app_name }} | Create configuration symlink"
+  ansible.builtin.file:
+    src: "{{ src_path }}"
+    dest: "{{ dest_path }}"
+    state: link
+    force: true
+
+# Examples:
+#
+#   Example 1: Deploy multi-file directory structure
+#   Deploy all files from roles/nvim/files/ to ~/.config/nvim
+#
+#   - name: Deploy Neovim configuration
+#     ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
+#     vars:
+#       app_name: Neovim
+#       dest_path: "{{ ansible_facts['user_dir'] }}/.config/nvim"
+#
+#   Example 2: Deploy single configuration file
+#   Deploy roles/zsh/files/.zshrc to ~/.zshrc
+#
+#   - name: Deploy Zsh configuration
+#     ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
+#     vars:
+#       app_name: Zsh
+#       src_subpath: .zshrc
+#       dest_path: "{{ ansible_facts['user_dir'] }}/.zshrc"
+#
+#   Example 3: Deploy nested subdirectory
+#   Deploy roles/niri/files/niri to ~/.config/niri
+#
+#   - name: Deploy Niri configuration
+#     ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
+#     vars:
+#       app_name: Niri
+#       src_subpath: niri
+#       dest_path: "{{ ansible_facts['user_dir'] }}/.config/niri"
