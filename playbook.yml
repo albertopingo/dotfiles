@@ -10,23 +10,26 @@
       tags: always
 
     # Examples:
-    # Run all: ./bin/dotfiles
-    # Run specific roles: ./bin/dotfiles --tags neovim,vscode
-    # Skip specific roles: ./bin/dotfiles --skip-tags nvidia,ly
+    # Run all: dotfiles
+    # Run specific roles: dotfiles --tags neovim,vscode
+    # Skip specific roles: dotfiles --skip-tags nvidia,ly
     - name: Set roles
       ansible.builtin.set_fact:
-        run_roles: "{{ (ansible_run_tags | list != ['all'] and ansible_run_tags | list or default_roles | difference(exclude_roles | default([])) | sort) }}"
-      tags: always # Always run even when selecting specific roles
+        role_list: >-
+          {{ ansible_run_tags | list if (ansible_run_tags | list != ['all'])
+            else (default_roles | difference(ansible_skip_tags) | sort if (ansible_skip_tags)
+            else default_roles | sort) }}
+      tags: always
 
     - name: Run roles
       ansible.builtin.include_role:
         apply:
           tags:
-            - "{{ roles_item }}"
-        name: "{{ roles_item }}"
+            - "{{ role_name }}"
+        name: "{{ role_name }}"
       loop_control:
-        loop_var: roles_item
-      with_items: "{{ run_roles }}"
+        loop_var: role_name
+      with_items: "{{ role_list }}"
       tags: always
 
   post_tasks:
