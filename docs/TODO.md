@@ -43,6 +43,7 @@
 - `pass`
 - `atuin`
 - `direnv`
+- `pastel` - https://www.youtube.com/watch?v=3BxIpVk_xZI
 
 #### GUI File Manager
 Do I need one when yazi? xdd
@@ -50,3 +51,7 @@ Do I need one when yazi? xdd
 - `dolphin`
 - `nemo`
 - `thunar`
+
+### Scripts
+- https://github.com/dylanaraps/pure-bash-bible
+- https://github.com/dylanaraps/pure-sh-bible
