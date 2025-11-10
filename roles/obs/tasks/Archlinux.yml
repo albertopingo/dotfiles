@@ -29,5 +29,4 @@
     no_extra_spaces: yes
   loop: "{{ desktop_files.stdout_lines }}"
   when: desktop_files.stdout_lines | length > 0 and lookup('file', item) is not search('Hidden=')
-  become: yes
-
+  become: true

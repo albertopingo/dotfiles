@@ -9,7 +9,7 @@
   with_fileglob:
     - /usr/share/applications/*cmake*.desktop
   when: lookup('file', item) is not search('Hidden=')
-  become: yes
+  become: true
 
 - name: "{{ ansible_facts['distribution'] }} | Hide lstopo .desktop files"
   community.general.ini_file:
@@ -21,7 +21,7 @@
   with_fileglob:
     - /usr/share/applications/*lstopo*.desktop
   when: lookup('file', item) is not search('Hidden=')
-  become: yes
+  become: true
 
 #- name: "{{ ansible_facts['distribution'] }} | Find .desktop files containing V4L2"
 #  shell: grep -l "V4L2" /usr/share/applications/*.desktop 2>/dev/null || true
@@ -37,7 +37,7 @@
 #    no_extra_spaces: yes
 #  loop: "{{ desktop_files.stdout_lines }}"
 #  when: desktop_files.stdout_lines | length > 0 and lookup('file', item) is not search('Hidden=')
-#  become: yes
+#  become: true
 #
 #- name: "{{ ansible_facts['distribution'] }} | Hide lsp_plugins .desktop files"
 #  community.general.ini_file:
@@ -49,5 +49,4 @@
 #  with_fileglob:
 #    - /usr/share/applications/*lsp_plug*.desktop
 #  when: lookup('file', item) is not search('Hidden=')
-#  become: yes
-
+#  become: true

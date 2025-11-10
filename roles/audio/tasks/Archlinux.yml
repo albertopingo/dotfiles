@@ -44,7 +44,7 @@
   with_fileglob:
     - /usr/share/applications/*lsp_plug*.desktop
   when: lookup('file', item) is not search('Hidden=')
-  become: yes
+  become: true
 
 - name: "{{ ansible_facts['distribution'] }} | Find .desktop files containing Avahi"
   shell: grep -l "Avahi" /usr/share/applications/*.desktop 2>/dev/null || true
@@ -60,6 +60,4 @@
     no_extra_spaces: yes
   loop: "{{ avahi_desktop_files.stdout_lines }}"
   when: avahi_desktop_files.stdout_lines | length > 0 and lookup('file', item) is not search('Hidden=')
-  become: yes
-
-
+  become: true
