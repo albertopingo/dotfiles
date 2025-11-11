@@ -1,0 +1,33 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install Docker"
+  community.general.pacman:
+    name:
+      - docker
+      - docker-compose
+      - bash-completion
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Enable service"
+  ansible.builtin.systemd:
+    name: docker.service
+    enabled: true
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Start service"
+  ansible.builtin.systemd:
+    name: docker.service
+    state: started
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Add user to docker group"
+  ansible.builtin.user:
+    name: "{{ ansible_facts['user_id'] }}"
+    groups: docker
+    append: true
+  become: true
+  register: add_docker_group_result
+
+- name: "{{ ansible_facts['distribution'] }} | Refresh group membership"
+  ansible.builtin.command: newgrp docker
+  when: add_docker_group_result.changed
