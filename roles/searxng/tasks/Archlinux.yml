@@ -43,6 +43,7 @@
     files: docker-compose.yml
     state: present
   register: output
+  become: true
 
 - name: "{{ ansible_facts['distribution'] }} | Verify that searxng service is running"
   ansible.builtin.assert:

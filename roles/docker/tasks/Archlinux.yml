@@ -7,6 +7,7 @@
       - bash-completion
     state: present
   become: true
+  register: docker_installed
 
 - name: "{{ ansible_facts['distribution'] }} | Enable service"
   ansible.builtin.systemd:
@@ -26,8 +27,7 @@
     groups: docker
     append: true
   become: true
-  register: add_docker_group_result
 
 - name: "{{ ansible_facts['distribution'] }} | Refresh group membership"
   ansible.builtin.command: newgrp docker
-  when: add_docker_group_result.changed
+  when: docker_installed.changed

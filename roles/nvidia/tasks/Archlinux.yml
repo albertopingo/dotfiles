@@ -6,6 +6,7 @@
     line: '[multilib]'
     state: present
   become: true
+  register: multilib_section
 
 - name: "{{ ansible_facts['distribution'] }} | Uncomment Include line for multilib in pacman.conf"
   ansible.builtin.lineinfile:
@@ -15,10 +16,12 @@
     insertafter: '^\[multilib\]'
     state: present
   become: true
+  when: multilib_section.changed
 
 - name: "{{ ansible_facts['distribution'] }} | Update pacman database after enabling multilib"
   ansible.builtin.shell: pacman -Sy --noconfirm
   become: true
+  when: multilib_section.changed
 
 - name: "{{ ansible_facts['distribution'] }} | Install Nvidia packages"
   community.general.pacman:

@@ -25,6 +25,7 @@
       # - xorg-xrdb
     state: present
   become: true
+  register: fonts_installed
 
 - name: "{{ ansible_facts['distribution'] }} | Install Symbola font"
   kewlfft.aur.aur:
@@ -96,6 +97,7 @@
 - name: "{{ ansible_facts['distribution'] }} | Refresh font cache"
   ansible.builtin.command: fc-cache -fv
   become: true
+  when: fonts_installed.changed
 
 - name: "{{ ansible_facts['distribution'] }} | Hide Fontforge .desktop file"
   community.general.ini_file:

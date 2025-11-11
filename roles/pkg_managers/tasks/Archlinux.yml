@@ -46,6 +46,7 @@
   loop:
     - system
     - user
+  register: flathub_repo
 
 - name: "{{ ansible_facts['distribution'] }} | Add Flathub Beta repository"
   community.general.flatpak_remote:
@@ -57,7 +58,9 @@
   loop:
     - system
     - user
+  register: flathub_beta_repo
 
 - name: "{{ ansible_facts['distribution'] }} | Update flatpak application database"
   ansible.builtin.command:
     cmd: flatpak update --appstream
+  when: flathub_repo.changed or flathub_beta_repo.changed
