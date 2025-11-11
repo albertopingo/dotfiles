@@ -7,7 +7,7 @@
     - name: Create 'aur_builder' user
       ansible.builtin.import_tasks: tasks/create_aur_builder.yml
       register: aur_builder_user
-      tags: always
+      tags: never
 
     # Examples:
     # Run all: dotfiles
@@ -35,4 +35,4 @@
   post_tasks:
     - name: Delete 'aur_builder' user
       ansible.builtin.import_tasks: tasks/delete_aur_builder.yml
-      tags: always
+      tags: never

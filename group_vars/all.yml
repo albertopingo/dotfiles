@@ -31,3 +31,7 @@ default_roles:
   - obs
   # - stremio
   - vscode
+
+# Services
+  - docker
+  - searxng
