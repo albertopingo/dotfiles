@@ -1,0 +1,52 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Create docker/searxng folder"
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/docker/searxng/searxng"
+    state: directory
+    mode: '0755'
+
+- name: "{{ ansible_facts['distribution'] }} | Generate secret key"
+  ansible.builtin.command:
+    cmd: openssl rand -hex 32
+  register: secret_key
+  changed_when: false
+
+# If it does not exist, create a basic settings.yml file. Dont run if it already exists.
+
+# verify if settings.yml already exists
+- name: "{{ ansible_facts['distribution'] }} | Check if settings.yml exists"
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] }}/docker/searxng/searxng/settings.yml"
+  register: settings_yml
+
+- name: "{{ ansible_facts['distribution'] }} | Create settings.yml"
+  ansible.builtin.copy:
+    content: |
+      use_default_settings: true
+      server:
+        secret_key: "{{ secret_key.stdout }}"
+        limiter: false
+        image_proxy: true
+    dest: "{{ ansible_facts['user_dir'] }}/docker/searxng/searxng/settings.yml"
+    mode: '0644'
+  when: not settings_yml.stat.exists
+
+- name: "{{ ansible_facts['distribution'] }} | Copy docker-compose.yml to docker/searxng folder"
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: "{{ ansible_facts['user_dir'] }}/docker/searxng/docker-compose.yml"
+    mode: '0644'
+
+- name: "{{ ansible_facts['distribution'] }} | Run searxng docker-compose"
+  community.docker.docker_compose_v2:
+    project_src: "{{ ansible_facts['user_dir'] }}/docker/searxng"
+    files: docker-compose.yml
+    state: present
+  register: output
+
+- name: "{{ ansible_facts['distribution'] }} | Verify that searxng service is running"
+  ansible.builtin.assert:
+    that: searxng_container.State == 'running'
+  vars:
+    searxng_container: >-
+      {{ output.containers | selectattr("Service", "equalto", "searxng") | first }}
