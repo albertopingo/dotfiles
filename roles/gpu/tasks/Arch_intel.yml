@@ -1,0 +1,11 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install Intel GPU packages"
+  community.general.pacman:
+    name:
+      - mesa
+      - lib32-mesa
+      - vulkan-intel
+      - lib32-vulkan-intel
+    state: present
+  become: true
+

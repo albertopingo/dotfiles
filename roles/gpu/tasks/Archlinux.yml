@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Run Intel GPU Drivers tasks"
+  ansible.builtin.include_tasks: "Arch_intel.yml"
+
+- name: "{{ ansible_facts['distribution'] }} | Run NVIDIA GPU Drivers tasks"
+  ansible.builtin.include_tasks: "Arch_nvidia.yml"

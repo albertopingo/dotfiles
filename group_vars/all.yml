@@ -3,7 +3,7 @@ aur_helper: yay
 
 default_roles:
 # System
-  - nvidia
+  - gpu
   - audio
   - fonts
   - shell
