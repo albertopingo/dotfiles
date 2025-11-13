@@ -13,6 +13,17 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/albertopingo/dotfiles/ma
 
 ---
 
+## Useful commands
+
+
+- Gather ansible_facts to file:
+
+```bash
+ansible localhost -m setup > facts.json
+```
+
+---
+
 ## Inspired By
 
 This project draws inspiration from these excellent dotfiles and automation repositories:
