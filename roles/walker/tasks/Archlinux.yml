@@ -1,0 +1,31 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install App_Name"
+  kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
+    name:
+      - walker
+      - elephant
+    state: present
+  become: true
+  become_user: aur_builder
+
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install App_Name optional dependencies"
+  kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
+    name:
+      - elephant-nirisessions
+      - elephant-calc
+      - elephant-clipboard
+      - elephant-bluetooth
+      - elephant-desktopapplications
+      - elephant-files
+      - elephant-menus
+      - elephant-providerlist
+      - elephant-runner
+      - elephant-symbols
+      - elephant-unicode
+      - elephant-websearch
+      - elephant-todo
+    state: present
+  become: true
+  become_user: aur_builder
