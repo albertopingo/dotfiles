@@ -3,10 +3,40 @@
 #   Pacman
 # -------------------------------
 
+# - name: "{{ ansible_facts['distribution'] }} | [AUR] Install rate-mirrors"
+#   kewlfft.aur.aur:
+#     use: "{{ aur_helper }}"
+#     name: rate-mirrors-bin
+#     state: present
+#   become: true
+#   become_user: aur_builder
+#   register: rate_mirrors_install
+
+# - name: "{{ ansible_facts['distribution'] }} | Backup Pacman Mirrorlist"
+#   ansible.builtin.copy:
+#     src: /etc/pacman.d/mirrorlist
+#     dest: /etc/pacman.d/mirrorlist.backup
+#     backup: yes
+#   become: true
+#   when: rate_mirrors_install.changed
+
+# - name: "{{ ansible_facts['distribution'] }} | Optimize Pacman Mirrors"
+#   ansible.builtin.command:
+#     cmd: rate-mirrors --allow-root --protocol https arch | grep -v '^#' | sudo tee /etc/pacman.d/mirrorlist
+#   become: true
+#   when: rate_mirrors_install.changed
+
+- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Set Parallel downloads to 10"
+  ansible.builtin.replace:
+    path: /etc/pacman.conf
+    regexp: '^#?ParallelDownloads = \d+$'
+    replace: 'ParallelDownloads = 10'
+  become: true
+
 - name: "{{ ansible_facts['distribution'] }} | Pacman Config - Uncomment Color option"
   ansible.builtin.replace:
     path: /etc/pacman.conf
-    regexp: '^#Color$'
+    regexp: '^#?Color$'
     replace: 'Color'
     backup: yes
   become: true
@@ -14,7 +44,7 @@
 - name: "{{ ansible_facts['distribution'] }} | Pacman Config - Uncomment VerbosePkgLists option"
   ansible.builtin.replace:
     path: /etc/pacman.conf
-    regexp: '^#VerbosePkgLists$'
+    regexp: '^#?VerbosePkgLists$'
     replace: 'VerbosePkgLists'
   become: true
 
