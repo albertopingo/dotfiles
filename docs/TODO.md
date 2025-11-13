@@ -6,6 +6,18 @@
     - BTRFS
     - GRUB bootable snapshots
 
+## Desktop Enviroment
+
+- Walker - https://github.com/abenz1267/walker
+    - [ ] Themes
+    - [ ] App Launcher/Config
+    - [ ] Power Menu script
+    - Other useful scripts....
+
+- DE Shell
+  - → DIY Quickshell
+  - or DIY Waybar
+
 
 ## Apps and utility
 
@@ -14,7 +26,7 @@
 
 - [ ] Self-host:
     - Docker, Podman, Portainer - ?
-    - SearXNG
+    - [x] SearXNG
     - Gitea (with centralized server) - syncthing
 
 - [ ] Nix Development enviroments
