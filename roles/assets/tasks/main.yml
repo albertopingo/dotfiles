@@ -1,4 +1,4 @@
-- name: "Main | Setup Assets Symlink"
+- name: "Deploy Assets Symlink"
   ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
   vars:
     app_name: Assets

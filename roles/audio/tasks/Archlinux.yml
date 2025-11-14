@@ -33,7 +33,6 @@
     enabled: true
     scope: user
 
-
 - name: "{{ ansible_facts['distribution'] }} | Hide lsp_plugins .desktop files"
   community.general.ini_file:
     path: "{{ item }}"

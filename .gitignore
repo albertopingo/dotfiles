@@ -1,3 +1,5 @@
 first_run
 ansible.log
 facts.json
+.ansible
+.vscode

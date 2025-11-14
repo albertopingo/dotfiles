@@ -1,14 +1,14 @@
 ---
-- name: "Main | Checking for {{ ansible_facts['distribution'] }} Config"
+- name: "Checking tasks for {{ ansible_facts['distribution'] }}"
   ansible.builtin.stat:
     path: "{{ role_path }}/tasks/{{ ansible_facts['distribution'] }}.yml"
-  register: distribution_config
+  register: vscode_tasks
 
-- name: "Main | Run {{ ansible_facts['distribution'] }} Tasks"
+- name: "Run tasks for {{ ansible_facts['distribution'] }}"
   ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}.yml"
-  when: distribution_config.stat.exists
+  when: vscode_tasks.stat.exists
 
-- name: "Main | Setup VSCode Config Symlink"
+- name: "Deploy config symlink"
   ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
   vars:
     app_name: VSCode

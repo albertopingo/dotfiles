@@ -7,7 +7,7 @@ default_roles:
   - audio
   - fonts
   - shell
-  - ly
+  - display_manager
 
 # Desktop Environment
   - desktop_entries
