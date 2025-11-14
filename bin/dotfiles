@@ -4,8 +4,7 @@
 # DOTFILES
 # ==============================================================================
 # This script is intended to be run on a fresh Linux installation.
-# Supports: Arch.
-# Planned support for Debian, Fedora, etc.
+# Supports: Arch and Fedora
 # Local test command: bash ./bin/dotfiles --help
 
 # ==============================================================================
@@ -86,6 +85,15 @@ setup_arch() {
         cd ~
         rm -rf /tmp/yay
     fi
+}
+
+setup_fedora() {
+    print_info "Running initial Fedora setup..."
+    # Upgrade system
+    sudo dnf upgrade -y
+
+    # Install essential packages
+    sudo dnf install -y ansible
 }
 
 setup_git_config() {
@@ -179,12 +187,12 @@ if is_first_run; then
             print_info "Setting up for Arch Linux..."
             setup_arch
             ;;
+        fedora)
+            print_info "Setting up for Fedora..."
+            setup_fedora
+            ;;
         debian | ubuntu)
             print_warning "Debian/Ubuntu support is not implemented yet."
-            exit 1
-            ;;
-        fedora)
-            print_warning "Fedora support is not implemented yet."
             exit 1
             ;;
         *)

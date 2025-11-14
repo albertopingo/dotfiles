@@ -7,6 +7,7 @@
     - name: Create 'aur_builder' user
       ansible.builtin.import_tasks: tasks/create_aur_builder.yml
       register: aur_builder_user
+      when: ansible_facts['distribution'] == 'Archlinux'
       tags: always
 
     # Examples:
@@ -35,4 +36,5 @@
   post_tasks:
     - name: Delete 'aur_builder' user
       ansible.builtin.import_tasks: tasks/delete_aur_builder.yml
+      when: ansible_facts['distribution'] == 'Archlinux'
       tags: always
