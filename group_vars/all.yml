@@ -22,6 +22,7 @@ default_roles:
   - pkg_managers
 
 # TUI applications
+  - tmux
   - neovim
   - yazi
   - opencode
@@ -29,7 +30,7 @@ default_roles:
 # GUI applications
   - browsers
   - obs
-  # - stremio
+  - stremio
   - vscode
 
 # Services

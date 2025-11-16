@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install Tmux"
+  community.general.pacman:
+    name:
+      - tmux
+    state: present
+  become: true
