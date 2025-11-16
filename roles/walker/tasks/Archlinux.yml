@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_facts['distribution'] }} | [AUR] Install App_Name"
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install Walker"
   kewlfft.aur.aur:
     use: "{{ aur_helper }}"
     name:
@@ -9,7 +9,7 @@
   become: true
   become_user: aur_builder
 
-- name: "{{ ansible_facts['distribution'] }} | [AUR] Install App_Name optional dependencies"
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install Walker optional dependencies"
   kewlfft.aur.aur:
     use: "{{ aur_helper }}"
     name:
@@ -26,6 +26,6 @@
       - elephant-unicode
       - elephant-websearch
       - elephant-todo
-    state: absent
+    state: present
   become: true
   become_user: aur_builder
