@@ -3,6 +3,7 @@
   community.general.pacman:
     name:
       - firefox
+      - torbrowser-launcher
     state: present
   become: true
 
@@ -12,6 +13,7 @@
     name:
       - zen-browser-bin
       - brave-bin
+      - librewolf-bin
     state: present
   become: true
   become_user: aur_builder
