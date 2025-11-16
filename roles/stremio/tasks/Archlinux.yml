@@ -1,7 +1,6 @@
 ---
-- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install Stremio Beta"
+- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install Stremio"
   community.general.flatpak:
     name: com.stremio.Stremio
     state: present
-    method: user
     remote: flathub

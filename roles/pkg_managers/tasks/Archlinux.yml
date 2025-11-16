@@ -83,8 +83,10 @@
   ansible.builtin.command:
     cmd: flatpak remote-modify --subset=verified flathub
   when: flatpak_repos.changed
+  become: true
 
 - name: "{{ ansible_facts['distribution'] }} | Update flatpak application database"
   ansible.builtin.command:
     cmd: flatpak update --appstream
   when: flatpak_repos.changed
+

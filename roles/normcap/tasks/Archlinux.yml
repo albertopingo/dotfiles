@@ -3,5 +3,4 @@
   community.general.flatpak:
     name: com.github.dynobo.normcap
     state: present
-    method: user
     remote: flathub

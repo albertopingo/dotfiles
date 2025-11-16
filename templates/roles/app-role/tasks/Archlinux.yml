@@ -25,5 +25,4 @@
   community.general.flatpak:
     name: com.example.app_role
     state: present
-    method: user
     remote: flathub
