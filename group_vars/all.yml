@@ -3,6 +3,8 @@ aur_helper: yay
 
 default_roles:
 # System
+  - security
+  - snapshots
   - gpu
   - audio
   - fonts
@@ -32,6 +34,7 @@ default_roles:
   - obs
   - stremio
   - vscode
+  - obsidian
 
 # Services
   - docker
