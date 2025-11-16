@@ -1,0 +1,14 @@
+---
+# Relevant documentation:
+# - https://wiki.archlinux.org/title/Btrfs
+# - https://wiki.archlinux.org/title/Snapper
+
+- name: "{{ ansible_facts['distribution'] }} | Install Snapshot Tools"
+  community.general.pacman:
+    name:
+      - grub-btrfs
+      - inotify-tools
+      - snapper
+      # - snap-pac
+    state: present
+  become: true
