@@ -3,8 +3,8 @@
   kewlfft.aur.aur:
     use: "{{ aur_helper }}"
     name:
-      - walker
-      - elephant
+      - walker-bin
+      - elephant-bin
     state: present
   become: true
   become_user: aur_builder
@@ -26,6 +26,6 @@
       - elephant-unicode
       - elephant-websearch
       - elephant-todo
-    state: present
+    state: absent
   become: true
   become_user: aur_builder

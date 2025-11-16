@@ -66,31 +66,25 @@
     state: present
   become: true
 
-- name: "{{ ansible_facts['distribution'] }} | Add the Flathub repository"
+- name: "{{ ansible_facts['distribution'] }} | Add the Flathub repositories"
   community.general.flatpak_remote:
-    name: flathub
+    name: "{{ item }}"
     state: present
-    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
-    method: "{{ item }}"
-  become: "{{ true if item == 'system' else false }}"
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+    method: system
+  register: flatpak_repos
   loop:
-    - system
-    - user
-  register: flathub_repo
+    - flathub
+    - flathub-unverified
+  become: true
 
-- name: "{{ ansible_facts['distribution'] }} | Add Flathub Beta repository"
-  community.general.flatpak_remote:
-    name: flathub-beta
-    state: present
-    flatpakrepo_url: https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-    method: "{{ item }}"
-  become: "{{ true if item == 'system' else false }}"
-  loop:
-    - system
-    - user
-  register: flathub_beta_repo
+  # flatpak remote-modify --subset=verified flathub
+- name: "{{ ansible_facts['distribution'] }} | Modify Flathub repository to verified only apps"
+  ansible.builtin.command:
+    cmd: flatpak remote-modify --subset=verified flathub
+  when: flatpak_repos.changed
 
 - name: "{{ ansible_facts['distribution'] }} | Update flatpak application database"
   ansible.builtin.command:
     cmd: flatpak update --appstream
-  when: flathub_repo.changed or flathub_beta_repo.changed
+  when: flatpak_repos.changed

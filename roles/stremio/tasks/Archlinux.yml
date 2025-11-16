@@ -4,4 +4,4 @@
     name: com.stremio.Stremio
     state: present
     method: user
-    remote: flathub-beta
+    remote: flathub

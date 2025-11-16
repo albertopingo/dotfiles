@@ -1,11 +1,10 @@
 ---
-- name: "{{ ansible_facts['distribution'] }} | [AUR] Install OBS Studio"
-  kewlfft.aur.aur:
-    use: "{{ aur_helper }}"
-    name: obs-studio-git
+- name: "{{ ansible_facts['distribution'] }} | Install OBS Studio"
+  community.general.pacman:
+    name:
+      - obs-studio
     state: present
   become: true
-  become_user: aur_builder
 
 - name: "{{ ansible_facts['distribution'] }} | Install OBS Studio dependencies"
   community.general.pacman:
