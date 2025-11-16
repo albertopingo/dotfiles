@@ -1,4 +1,12 @@
 ---
+# ----------------------------------
+# Arch Linux Security Hardening
+# https://wiki.archlinux.org/title/Security
+# ----------------------------------
+
+# -------------------------------
+# https://wiki.archlinux.org/title/Security#Mandatory_access_control
+# https://wiki.archlinux.org/title/AppArmor
 - name: "{{ ansible_facts['distribution'] }} | Install AppArmor"
   community.general.pacman:
     name:
@@ -6,9 +14,13 @@
     state: present
   become: true
 
-# Set AppArmor kernel parameters
-# lsm=landlock,lockdown,yama,integrity,apparmor,bpf
-# Edit /etc/default/grub and append your kernel options between the quotes in the GRUB_CMDLINE_LINUX_DEFAULT line
+- name: "{{ ansible_facts['distribution'] }} | Enable AppArmor service"
+  ansible.builtin.systemd:
+    name: apparmor.service
+    enabled: true
+    state: started
+  become: true
+
 - name: "{{ ansible_facts['distribution'] }} | Check if LSM parameters already set"
   ansible.builtin.lineinfile:
     path: /etc/default/grub
