@@ -1,0 +1,9 @@
+---
+- name: "Checking tasks for {{ ansible_facts['distribution'] }}"
+  ansible.builtin.stat:
+    path: "{{ role_path }}/tasks/{{ ansible_facts['distribution'] }}.yml"
+  register: security_tasks
+
+- name: "Run tasks for {{ ansible_facts['distribution'] }}"
+  ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}.yml"
+  when: security_tasks.stat.exists

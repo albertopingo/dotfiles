@@ -1,0 +1,28 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install AppArmor"
+  community.general.pacman:
+    name:
+      - apparmor
+    state: present
+  become: true
+
+# Set AppArmor kernel parameters
+# lsm=landlock,lockdown,yama,integrity,apparmor,bpf
+# Edit /etc/default/grub and append your kernel options between the quotes in the GRUB_CMDLINE_LINUX_DEFAULT line
+- name: "{{ ansible_facts['distribution'] }} | Check if LSM parameters already set"
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=.*lsm='
+    state: absent
+  check_mode: true
+  register: lsm_check
+  changed_when: false
+
+- name: "{{ ansible_facts['distribution'] }} | Set AppArmor kernel parameters"
+  ansible.builtin.replace:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*)"$'
+    replace: '\1 lsm=landlock,lockdown,yama,integrity,apparmor,bpf"'
+  when: lsm_check.found == 0
+  notify: Update GRUB
+  become: true
