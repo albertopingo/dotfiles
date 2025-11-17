@@ -12,4 +12,20 @@
   ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
   vars:
     app_name: Walker
+    src_subpath: walker
     dest_path: "{{ ansible_facts['user_dir'] }}/.config/walker"
+
+- name: "Deploy Service symlink"
+  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
+  vars:
+    app_name: Walker.Service
+    src_subpath: walker.service
+    dest_path: "{{ ansible_facts['user_dir'] }}/.config/systemd/user/walker.service"
+
+- name: Enable Walker service
+  ansible.builtin.systemd:
+    name: walker.service
+    enabled: true
+    state: started
+    scope: user
+    daemon_reload: true

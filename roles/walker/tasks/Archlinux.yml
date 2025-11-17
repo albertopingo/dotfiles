@@ -8,6 +8,14 @@
     state: present
   become: true
   become_user: aur_builder
+  register: walker_install
+
+- name: "{{ ansible_facts['distribution'] }} | Install Walker optional dependencies"
+  community.general.pacman:
+    name:
+      - openbsd-netcat # Networking - Netcat for walker socket
+    state: present
+  become: true
 
 - name: "{{ ansible_facts['distribution'] }} | [AUR] Install Walker optional dependencies"
   kewlfft.aur.aur:
@@ -15,7 +23,6 @@
     name:
       - elephant-nirisessions
       - elephant-calc
-      - elephant-clipboard
       - elephant-bluetooth
       - elephant-desktopapplications
       - elephant-files
@@ -28,4 +35,9 @@
     state: present
   become: true
   become_user: aur_builder
+
+# run elephant service enable cmd
+- name: "{{ ansible_facts['distribution'] }} | Generate and Enable Elephant service"
+  ansible.builtin.command: elephant service enable
+  when: walker_install.changed
 
