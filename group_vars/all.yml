@@ -28,6 +28,7 @@ default_roles:
   - neovim
   - yazi
   - opencode
+  - ytdlp
 
 # GUI applications
   - browsers

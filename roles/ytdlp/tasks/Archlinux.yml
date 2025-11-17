@@ -1,0 +1,14 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install YT-dlp"
+  community.general.pacman:
+    name:
+      - yt-dlp
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Install YT-dlp optional dependencies"
+  community.general.pacman:
+    name:
+      - yt-dlp-ejs
+    state: present
+  become: true
