@@ -18,3 +18,28 @@
   loop:
     - "EDITOR=nvim"
     - "VISUAL=nvim"
+
+# Type list from Omarchy's mimetypes.sh
+- name: "{{ ansible_facts['distribution'] }} | Set Neovim as default in xdg_mime"
+  community.general.xdg_mime:
+    mime_types:
+      - text/plain
+      - text/english
+      - text/x-makefile
+      - text/x-c++hdr
+      - text/x-c++src
+      - text/x-chdr
+      - text/x-csrc
+      - text/x-java
+      - text/x-moc
+      - text/x-pascal
+      - text/x-tcl
+      - text/x-tex
+      - application/x-shellscript
+      - text/x-c
+      - text/x-c++
+      - application/xml
+      - text/xml
+    handler: nvim.desktop
+
+    
