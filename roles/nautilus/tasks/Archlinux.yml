@@ -16,7 +16,7 @@
       - gst-plugins-bad
       - gst-plugins-ugly
       - gst-libav
-      - gst-plugins-va
+      - gst-plugin-va
     state: present
   become: true
 
