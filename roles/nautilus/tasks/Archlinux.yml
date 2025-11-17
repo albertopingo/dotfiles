@@ -1,0 +1,22 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install Nautilus"
+  community.general.pacman:
+    name:
+      - nautilus
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Install Nautilus optional dependencies"
+  community.general.pacman:
+    name:
+      # gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
+      - gstreamer
+      - gst-plugins-base
+      - gst-plugins-good
+      - gst-plugins-bad
+      - gst-plugins-ugly
+      - gst-libav
+      - gst-plugins-va
+    state: present
+  become: true
+
