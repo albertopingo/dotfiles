@@ -3,3 +3,8 @@
   ansible.builtin.command: grub-mkconfig -o /boot/grub/grub.cfg
   changed_when: true
   become: true
+
+- name: Reload firewall
+  ansible.builtin.command: ufw reload
+  changed_when: true
+  become: true

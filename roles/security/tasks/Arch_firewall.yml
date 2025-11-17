@@ -1,0 +1,29 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install UFW Firewall"
+  community.general.pacman:
+    name:
+      - ufw
+    state: present
+  become: true
+
+- name: Enable UFW service
+  ansible.builtin.systemd:
+    name: ufw.service
+    enabled: true
+    state: started
+    daemon_reload: true
+  become: true
+
+#- community.general.ufw:
+#    rule: limit
+#    port: ssh
+#    proto: tcp
+#  become: true
+
+- name: UFW - Enable and deny by default
+  community.general.ufw:
+    state: enabled
+    default: deny
+  become: true
+  notify: Reload Firewall
+

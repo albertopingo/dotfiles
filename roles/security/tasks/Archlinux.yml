@@ -4,6 +4,9 @@
 # https://wiki.archlinux.org/title/Security
 # ----------------------------------
 
+- name: "{{ ansible_facts['distribution'] }} | Include Firewall Task"
+  ansible.builtin.include_tasks: "Arch_firewall.yml"
+
 # -------------------------------
 # https://wiki.archlinux.org/title/Security#Mandatory_access_control
 # https://wiki.archlinux.org/title/AppArmor
