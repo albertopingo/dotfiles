@@ -1,0 +1,132 @@
+/* Color definitions */
+@define-color base            #191724;
+@define-color overlay         #26233a;
+@define-color text            #e0def4;
+@define-color love            #eb6f92;
+@define-color gold            #f6c177;
+@define-color rose            #ebbcba;
+@define-color pine            #31748f;
+
+/* Reset all styles */
+* {
+  all: unset;
+}
+
+/* Window wrapper */
+.box-wrapper {
+  box-shadow:
+    0 19px 38px rgba(0, 0, 0, 0.3),
+    0 15px 12px rgba(0, 0, 0, 0.22);
+  background: alpha(@base, 0.95);
+  padding: 10px;
+  border-radius: 20px;
+}
+
+/* Input field */
+.input {
+  caret-color: @gold;
+  background: alpha(@overlay, 0.95);
+  padding: 8px;
+  color: @text;
+  border-radius: 10px;
+}
+
+.input placeholder {
+  opacity: 0.5;
+  color: @text;
+}
+
+/* List items */
+.list {
+  color: @pine;
+}
+
+.item-box {
+  border-radius: 10px;
+  padding: 10px;
+}
+
+child:hover .item-box,
+child:selected .item-box {
+  background: @rose;
+}
+
+child:selected .item-text {
+  color: @base;
+  font-weight: bold;
+}
+
+.item-text {
+  font-size: 14px;
+  color: @text;
+}
+
+.item-subtext {
+  font-size: 12px;
+  opacity: 0;
+}
+
+.item-image,
+.item-image-text {
+  margin-right: 10px;
+}
+
+/* Quick activation labels */
+.item-quick-activation {
+  margin-left: 10px;
+  background: @overlay;
+  border-radius: 5px;
+  padding: 8px;
+  color: @rose;
+  font-weight: bold;
+}
+
+/* Placeholders */
+.placeholder,
+.elephant-hint {
+  color: @love;
+  opacity: 0.95;
+}
+
+/* Keybinds display */
+.keybinds-wrapper {
+  border-top: 2px solid @overlay;
+  font-size: 12px;
+  opacity: 0.80;
+  color: @rose;
+}
+
+.keybind-bind {
+  font-weight: bold;
+  text-transform: lowercase;
+}
+
+/* Error display */
+.error {
+  padding: 10px;
+  background: @base;
+  color: @love;
+  border-radius: 5px;
+}
+
+/* Preview pane */
+.preview {
+  border: 1px solid alpha(@love, 0.25);
+  padding: 10px;
+  border-radius: 10px;
+  color: @text;
+}
+
+/* Icon sizes */
+.normal-icons {
+  -gtk-icon-size: 16px;
+}
+
+.large-icons {
+  -gtk-icon-size: 32px;
+}
+
+/* Hide scrollbar */
+scrollbar {
+  opacity: 0;
+}

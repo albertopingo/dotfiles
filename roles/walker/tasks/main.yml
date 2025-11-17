@@ -8,8 +8,8 @@
   ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}.yml"
   when: walker_tasks.stat.exists
 
-# - name: "Deploy config symlink"
-#   ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
-#   vars:
-#     app_name: App_Name
-#     dest_path: "{{ ansible_facts['user_dir'] }}/.config/app_name"
+- name: "Deploy config symlink"
+  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
+  vars:
+    app_name: Walker
+    dest_path: "{{ ansible_facts['user_dir'] }}/.config/walker"

@@ -1,0 +1,5 @@
+theme = "rosepine"
+
+[providers]
+default = ["desktopapplications", "calc",]
+empty = ["desktopapplications"]
