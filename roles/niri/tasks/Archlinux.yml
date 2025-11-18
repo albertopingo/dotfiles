@@ -12,5 +12,6 @@
       - libsecret
       - gnome-keyring
       - seahorse
+      - flameshot # Screenshot tool with annotations
     state: present
   become: true
