@@ -12,6 +12,9 @@
       - libsecret
       - gnome-keyring
       - seahorse
-      - flameshot # Screenshot tool with annotations
+      # Screenshot tool with annotations
+      - swappy 
+      - grim
+      - slurp
     state: present
   become: true
