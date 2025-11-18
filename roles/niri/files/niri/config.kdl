@@ -5,6 +5,10 @@ environment {
     DISPLAY ":0"
 }
 
+overview {
+    backdrop-color "#26233a"
+}
+
 spawn-at-startup "quickshell"
 spawn-at-startup "xwayland-satellite"
 
@@ -78,7 +82,7 @@ hotkey-overlay {
 }
 
 layout {
-    background-color "transparent"
+    background-color "#26233a"
 
     // Set gaps around windows in logical pixels.
     gaps 12 
