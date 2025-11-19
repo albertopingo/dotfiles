@@ -9,6 +9,12 @@ overview {
     backdrop-color "#26233a"
 }
 
+gestures {
+    hot-corners {
+        off
+    }
+}
+
 spawn-at-startup "quickshell"
 spawn-at-startup "xwayland-satellite"
 
