@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install OBS Studio"
+  ansible.builtin.dnf5:
+    name:
+      - obs-studio
+    state: present
+  become: true

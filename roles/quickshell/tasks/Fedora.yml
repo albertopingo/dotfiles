@@ -1,0 +1,14 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | [COPR] Enable Errornointernet/Quickshell"
+  community.general.copr:
+    host: copr.fedorainfracloud.org
+    state: enabled
+    name: errornointernet/quickshell
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Install Quickshell"
+  ansible.builtin.dnf5:
+    name:
+      - quickshell
+    state: present
+  become: true

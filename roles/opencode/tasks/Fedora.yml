@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | [NPM] Install OpenCode"
+  community.general.npm:
+    name: opencode-ai
+    global: true
+  become: true
+

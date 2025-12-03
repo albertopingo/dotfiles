@@ -1,0 +1,28 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | [COPR] Enable Yalter/Niri"
+  community.general.copr:
+    host: copr.fedorainfracloud.org
+    state: enabled
+    name: yalter/niri
+  become: true
+  
+# For hyprpaper
+- name: "{{ ansible_facts['distribution'] }} | [COPR] Enable Solopasha/Hyprland"
+  community.general.copr:
+    host: copr.fedorainfracloud.org
+    state: enabled
+    name: solopasha/hyprland
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Install Niri"
+  ansible.builtin.dnf5:
+    name:
+      - niri
+      - xwayland-satellite
+      - mako
+      - hyprpaper
+      - swappy 
+      - grim
+      - slurp
+    state: present
+  become: true

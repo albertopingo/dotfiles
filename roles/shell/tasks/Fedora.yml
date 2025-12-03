@@ -1,10 +1,10 @@
 ---
 - name: "{{ ansible_facts['distribution'] }} | Install Shell packages"
-  community.general.pacman:
+  ansible.builtin.dnf5:
     name:
       - zsh
       - fzf
       - fastfetch
-      - less
     state: present
   become: true
+

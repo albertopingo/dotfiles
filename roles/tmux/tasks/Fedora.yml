@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install Tmux"
+  ansible.builtin.dnf5:
+    name:
+      - tmux
+    state: present
+  become: true

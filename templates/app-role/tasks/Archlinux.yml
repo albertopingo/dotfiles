@@ -1,0 +1,28 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install app_role"
+  community.general.pacman:
+    name:
+      - app_role
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Install app_role optional dependencies"
+  community.general.pacman:
+    name:
+      - dependency1
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install app_role"
+  kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
+    name: app_role
+    state: present
+  become: true
+  become_user: aur_builder
+
+- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install app_role"
+  community.general.flatpak:
+    name: com.example.app_role
+    state: present
+    remote: flathub

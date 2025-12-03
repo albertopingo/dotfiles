@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install NormCap OCR"
+  community.general.flatpak:
+    name: com.github.dynobo.normcap
+    state: present
+    remote: flathub

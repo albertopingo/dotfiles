@@ -1,0 +1,29 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | [COPR] Enable Errornointernet/Walker"
+  community.general.copr:
+    host: copr.fedorainfracloud.org
+    state: enabled
+    name: errornointernet/walker
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Install Niri"
+  ansible.builtin.dnf5:
+    name:
+      - walker
+      - elephant
+    state: present
+  become: true
+  register: walker_install
+  
+- name: "{{ ansible_facts['distribution'] }} | Install Walker optional dependencies"
+  ansible.builtin.dnf5:
+    name:
+      - netcat # Networking - Netcat for walker socket
+    state: present
+  become: true
+  
+- name: "{{ ansible_facts['distribution'] }} | Generate and Enable Elephant service"
+  ansible.builtin.command: elephant service enable
+  when: walker_install.changed
+
+

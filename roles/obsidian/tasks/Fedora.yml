@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install Obsidian"
+  community.general.flatpak:
+    name: md.obsidian.Obsidian
+    state: present
+    remote: flathub

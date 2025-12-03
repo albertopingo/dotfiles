@@ -1,0 +1,8 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install Alacritty"
+  ansible.builtin.dnf5:
+    name:
+      - alacritty
+    state: present
+  become: true
+

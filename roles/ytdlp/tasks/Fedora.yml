@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install YT-dlp"
+  ansible.builtin.dnf5:
+    name:
+      - yt-dlp
+    state: present
+  become: true
