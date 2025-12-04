@@ -1,0 +1,13 @@
+// `niri msg outputs`
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
+// output "DP-3" {
+    // mode "1920x1080@143.855"
+    // mode "1920x1080"
+    // scale 1
+// }
+
+// Built-in laptop monitor 
+ output "eDP-1" {
+     //mode "1920x1080"
+     scale 1.25
+ }

@@ -1,0 +1,24 @@
+environment {
+    DISPLAY ":0"
+}
+
+overview {
+    backdrop-color "#26233a"
+}
+
+gestures {
+    hot-corners {
+        off
+    }
+}
+
+spawn-at-startup "quickshell"
+spawn-at-startup "xwayland-satellite"
+
+spawn-at-startup "hyprpaper"
+
+//spawn-at-startup "elephant"
+//spawn-at-startup "walker" "--gapplication-service"
+
+
+screenshot-path "~/Pictures/Screenshots/SS-%Y-%m-%d %H-%M-%S.png"
