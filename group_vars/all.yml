@@ -17,8 +17,10 @@ default_roles:
   - niri
   - quickshell
   - gtk_qt
-  - wezterm
+  #- wezterm
+  - alacritty
   - normcap
+  - walker
 
 # Package Managers
   - pkg_managers
