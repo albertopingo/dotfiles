@@ -18,6 +18,8 @@ return {
 
             "dockerls",
             "cmake",
+            "ansiblels",
+            "yamlls",
         },
     },
     dependencies = {
@@ -34,5 +36,14 @@ return {
             },
         },
         "neovim/nvim-lspconfig",
+        "mfussenegger/nvim-lint",
+        {
+            "rshkarin/mason-nvim-lint",
+            opts = {
+                ensure_installed = { 'ansible_lint', },
+                ignore_install = { 'custom-linter', 'inko', 'clj-kondo', 'janet', 'ruby', },
+            },
+        },
+        "mfussenegger/nvim-ansible",
     },
 }
