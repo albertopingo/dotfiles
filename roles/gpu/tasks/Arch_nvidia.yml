@@ -57,7 +57,7 @@
     line: 'MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)'
     backup: true
   become: true
-  notify: regenerate initramfs
+  notify: Regenerate initramfs
 
 - name: "{{ ansible_facts['distribution'] }} | Ensure pacman hooks directory exists"
   ansible.builtin.file:

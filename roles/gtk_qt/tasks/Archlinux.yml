@@ -2,7 +2,7 @@
 - name: "{{ ansible_facts['distribution'] }} | Install gtk and qt"
   community.general.pacman:
     name:
-      - gtk2
+      #- gtk2
       - gtk3
       - gtk4
       - python-psutil

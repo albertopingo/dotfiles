@@ -18,8 +18,8 @@
       ansible.builtin.set_fact:
         role_list: >-
           {{ ansible_run_tags | list if (ansible_run_tags | list != ['all'])
-            else (default_roles | difference(ansible_skip_tags) | sort if (ansible_skip_tags)
-            else default_roles | sort) }}
+            else (default_roles | difference(ansible_skip_tags) if (ansible_skip_tags)
+            else default_roles) }}
       tags: always
 
     - name: Run roles

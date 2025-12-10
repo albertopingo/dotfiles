@@ -2,6 +2,9 @@
 aur_helper: yay
 
 default_roles:
+# Package Managers
+  - pkg_managers
+
 # System
   - security
   - snapshots
@@ -12,18 +15,14 @@ default_roles:
   - display_manager
 
 # Desktop Environment
-  - desktop_entries
   - assets
+  - gtk_qt
   - niri
   - quickshell
-  - gtk_qt
-  #- wezterm
+  # - wezterm
   - alacritty
   - normcap
   - walker
-
-# Package Managers
-  - pkg_managers
 
 # TUI applications
   - tmux
@@ -43,3 +42,6 @@ default_roles:
 # Services
   - docker
   - searxng
+
+# After roles
+  - desktop_entries

@@ -39,5 +39,5 @@
     regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*)"$'
     replace: '\1 lsm=landlock,lockdown,yama,integrity,apparmor,bpf"'
   when: lsm_check.found == 0
-  notify: Update GRUB
+  notify: Update GRUB configuration
   become: true

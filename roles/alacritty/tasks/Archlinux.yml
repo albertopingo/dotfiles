@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install Wezterm"
+  community.general.pacman:
+    name:
+      - alacritty
+    state: present
+  become: true
