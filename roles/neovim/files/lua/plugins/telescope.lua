@@ -17,6 +17,8 @@ return {
                 fzf = {},
             },
         })
+
+        require('telescope').load_extension("fzf")
         local builtin = require('telescope.builtin')
 
         vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
