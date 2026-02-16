@@ -15,7 +15,7 @@
 
 - name: "{{ ansible_facts['distribution'] }} | Disable getty2"
   ansible.builtin.systemd:
-    name: getty2.service
+    name: getty@tty2.service
     enabled: false
     state: stopped
   become: true
