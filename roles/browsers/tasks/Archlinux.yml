@@ -14,6 +14,7 @@
       - zen-browser-bin
       - brave-bin
       - librewolf-bin
+      - mullvad-browser-bin
     state: present
   become: true
   become_user: aur_builder
