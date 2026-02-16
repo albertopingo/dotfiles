@@ -1,6 +1,101 @@
 ---
-- name: "{{ ansible_facts['distribution'] }} | Run Intel GPU Drivers tasks"
-  ansible.builtin.include_tasks: "Arch_intel.yml"
+- name: "{{ ansible_facts['distribution'] }} | Install DKMS packages and utilities"
+  community.general.pacman:
+    name:
+      - dkms
+      - linux-headers
+      # Utility GPU packages
+      - nvtop
+      - lact
+    state: present
+  become: true
 
-- name: "{{ ansible_facts['distribution'] }} | Run NVIDIA GPU Drivers tasks"
-  ansible.builtin.include_tasks: "Arch_nvidia.yml"
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install NVIDIA Driver"
+  kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
+    name:
+      - nvidia-580xx-dkms
+      - nvidia-580xx-utils
+      - nvidia-580xx-settings
+      - lib32-nvidia-580xx-utils
+    state: present
+  become: true
+  become_user: aur_builder
+
+# Per ArchWiki (NVIDIA 2.3):  nvidia-application-profiles-rc.d
+# (see https://wiki.archlinux.org/title/NVIDIA)
+- name: "{{ ansible_facts['distribution'] }} | Create nvidia application profiles directory"
+  ansible.builtin.file:
+    path: /etc/nvidia/nvidia-application-profiles-rc.d
+    state: directory
+    mode: '0755'
+  become: true
+
+# Per ArchWiki (NVIDIA 2.3)
+- name: "{{ ansible_facts['distribution'] }} | Deploy Wayland compositor VRAM optimization profile"
+  ansible.builtin.copy:
+    src: 50-limit-free-buffer-pool-in-wayland-compositors.json
+    dest: /etc/nvidia/nvidia-application-profiles-rc.d/50-limit-free-buffer-pool-in-wayland-compositors.json
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+# -------------------
+# - Hybrid Graphics
+# -------------------
+- name: "{{ ansible_facts['distribution'] }} | Detect if system has integrated GPU (hybrid graphics)"
+  ansible.builtin.shell: lspci -d ::03xx | wc -l
+  register: gpu_count
+  changed_when: false
+
+- name: "{{ ansible_facts['distribution'] }} | Set hybrid graphics fact"
+  ansible.builtin.set_fact:
+    has_hybrid_graphics: "{{ gpu_count.stdout | int > 1 }}"
+
+# Per ArchWiki (NVIDIA 2.3):  nvidia-application-profiles-rc.d
+# (see https://wiki.archlinux.org/title/PRIME#NVIDIA)
+- name: " {{ ansible_facts['distribution'] }} | Install and configure hybrid graphics"
+  when: has_hybrid_graphics
+  block:
+    - name: "{{ ansible_facts['distribution'] }} | Install nvidia-prime and additional packages"
+      community.general.pacman:
+        name:
+          - nvidia-prime
+          - switcheroo-control
+        state: present
+      become: true
+
+    - name: "{{ ansible_facts['distribution'] }} | [AUR] Install nvidia-prime-rtd3pm"
+      kewlfft.aur.aur:
+        use: "{{ aur_helper }}"
+        name: nvidia-prime-rtd3pm
+        state: present
+      become: true
+      become_user: aur_builder
+
+    - name: "{{ ansible_facts['distribution'] }} | Enable nvidia-persistenced service"
+      ansible.builtin.systemd:
+        name: nvidia-persistenced.service
+        enabled: true
+      become: true
+
+    - name: "{{ ansible_facts['distribution'] }} | Enable switcheroo-control service"
+      ansible.builtin.systemd:
+        name: switcheroo-control.service
+        enabled: true
+      become: true
+
+# -------------------
+# - Intel GPU
+# -------------------
+- name: "{{ ansible_facts['distribution'] }} | Install Intel GPU packages"
+  community.general.pacman:
+    name:
+      - mesa
+      - lib32-mesa
+      - vulkan-intel
+      - lib32-vulkan-intel
+      - libva-intel-driver
+    state: present
+  become: true

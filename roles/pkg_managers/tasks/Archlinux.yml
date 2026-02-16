@@ -3,28 +3,28 @@
 #   Pacman
 # -------------------------------
 
-# - name: "{{ ansible_facts['distribution'] }} | [AUR] Install rate-mirrors"
-#   kewlfft.aur.aur:
-#     use: "{{ aur_helper }}"
-#     name: rate-mirrors-bin
-#     state: present
-#   become: true
-#   become_user: aur_builder
-#   register: rate_mirrors_install
+- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Enable multilib repository"
+  ansible.builtin.replace:
+    path: /etc/pacman.conf
+    regexp: '^#\[multilib\]'
+    replace: '[multilib]'
+    state: present
+  become: true
+  register: multilib_section
 
-# - name: "{{ ansible_facts['distribution'] }} | Backup Pacman Mirrorlist"
-#   ansible.builtin.copy:
-#     src: /etc/pacman.d/mirrorlist
-#     dest: /etc/pacman.d/mirrorlist.backup
-#     backup: yes
-#   become: true
-#   when: rate_mirrors_install.changed
+- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Enable multilib repository mirrorlist"
+  ansible.builtin.lineinfile:
+    path: /etc/pacman.conf
+    insertafter: '^\[multilib\]'
+    regexp: '^#Include = /etc/pacman.d/mirrorlist'
+    line: 'Include = /etc/pacman.d/mirrorlist'
+    state: present
+  become: true
 
-# - name: "{{ ansible_facts['distribution'] }} | Optimize Pacman Mirrors"
-#   ansible.builtin.command:
-#     cmd: rate-mirrors --allow-root --protocol https arch | grep -v '^#' | sudo tee /etc/pacman.d/mirrorlist
-#   become: true
-#   when: rate_mirrors_install.changed
+- name: "{{ ansible_facts['distribution'] }} | Update pacman database after enabling multilib"
+  ansible.builtin.shell: pacman -Sy --noconfirm
+  become: true
+  when: multilib_section.changed
 
 - name: "{{ ansible_facts['distribution'] }} | Pacman Config - Set Parallel downloads to 10"
   ansible.builtin.replace:
@@ -55,6 +55,29 @@
     line: 'ILoveCandy'
     state: present
   become: true
+
+# - name: "{{ ansible_facts['distribution'] }} | [AUR] Install rate-mirrors"
+#   kewlfft.aur.aur:
+#     use: "{{ aur_helper }}"
+#     name: rate-mirrors-bin
+#     state: present
+#   become: true
+#   become_user: aur_builder
+#   register: rate_mirrors_install
+
+# - name: "{{ ansible_facts['distribution'] }} | Backup Pacman Mirrorlist"
+#   ansible.builtin.copy:
+#     src: /etc/pacman.d/mirrorlist
+#     dest: /etc/pacman.d/mirrorlist.backup
+#     backup: yes
+#   become: true
+#   when: rate_mirrors_install.changed
+
+# - name: "{{ ansible_facts['distribution'] }} | Optimize Pacman Mirrors"
+#   ansible.builtin.command:
+#     cmd: rate-mirrors --allow-root --protocol https arch | grep -v '^#' | sudo tee /etc/pacman.d/mirrorlist
+#   become: true
+#   when: rate_mirrors_install.changed
 
 # -------------------------------
 #   Flatpak
@@ -89,4 +112,3 @@
   ansible.builtin.command:
     cmd: flatpak update --appstream
   when: flatpak_repos.changed
-
