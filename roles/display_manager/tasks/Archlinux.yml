@@ -9,6 +9,13 @@
 
 - name: "{{ ansible_facts['distribution'] }} | Enable service"
   ansible.builtin.systemd:
-    name: ly.service
+    name: ly@tty2.service
     enabled: true
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Disable getty2"
+  ansible.builtin.systemd:
+    name: getty2.service
+    enabled: false
+    state: stopped
   become: true
