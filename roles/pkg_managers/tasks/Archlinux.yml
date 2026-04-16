@@ -8,7 +8,6 @@
     path: /etc/pacman.conf
     regexp: '^#\[multilib\]'
     replace: '[multilib]'
-    state: present
   become: true
   register: multilib_section
 
