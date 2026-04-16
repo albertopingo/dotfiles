@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install mpv"
+  community.general.pacman:
+    name:
+      - mpv
+    state: present
+  become: true
