@@ -8,8 +8,10 @@
   ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}.yml"
   when: app_role_tasks.stat.exists
 
-# - name: "Deploy config symlink"
-#   ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
-#   vars:
-#     app_name: App_Name
-#     dest_path: "{{ ansible_facts['user_dir'] }}/.config/app_name"
+- name: Deploy Nautilus configuration
+  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
+  vars:
+    app_name: Nautilus
+    src_subpath: gtk-3.0
+    dest_path: "{{ ansible_facts['user_dir'] }}/.config/gtk-3.0"
+
