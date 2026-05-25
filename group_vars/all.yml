@@ -26,8 +26,8 @@ default_roles:
   - walker
   - mpv
   - imv
-  - sublime-text
-  - gnome-text-editor
+  - sublime_text
+  - gnome_text
 
   # TUI applications
   - tmux

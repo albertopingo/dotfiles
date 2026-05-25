@@ -11,13 +11,10 @@
 - name: "{{ ansible_facts['distribution'] }} | Set Neovim as default editor in /etc/environment"
   ansible.builtin.lineinfile:
     path: /etc/environment
-    line: "{{ item }}"
-    create: yes
+    regexp: "^EDITOR="
+    line: "EDITOR=nvim"
     mode: '0644'
   become: true
-  loop:
-    - "EDITOR=nvim"
-    - "VISUAL=nvim"
 
 # Type list from Omarchy's mimetypes.sh
 - name: "{{ ansible_facts['distribution'] }} | Set Neovim as default in xdg_mime"
@@ -41,5 +38,3 @@
       - application/xml
       - text/xml
     handler: nvim.desktop
-
-    

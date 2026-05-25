@@ -2,11 +2,11 @@
 - name: "Checking tasks for {{ ansible_facts['distribution'] }}"
   ansible.builtin.stat:
     path: "{{ role_path }}/tasks/{{ ansible_facts['distribution'] }}.yml"
-  register: app_role_tasks
+  register: gnome_text_tasks
 
 - name: "Run tasks for {{ ansible_facts['distribution'] }}"
   ansible.builtin.include_tasks: "{{ ansible_facts['distribution'] }}.yml"
-  when: app_role_tasks.stat.exists
+  when: gnome_text_tasks.stat.exists
 
 # - name: "Deploy config symlink"
 #   ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
