@@ -1,0 +1,43 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install app_role"
+  ansible.builtin.dnf5:
+    name:
+      - app_role
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Install app_role optional dependencies"
+  ansible.builtin.dnf:
+    name: 
+      - app_role
+    state: present
+  become: true
+    
+- name: "{{ ansible_facts['distribution'] }} | Import app_role key"
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+  become: true
+  
+- name: "{{ ansible_facts['distribution'] }} | Add app_role repository"
+  ansible.builtin.yum_repository:
+    name: app_role
+    description: app_role
+    baseurl: 'app_role'
+    gpgcheck: true
+    gpgkey: 'app_role.gpg'
+  become: true
+  
+- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install app_role"
+  community.general.flatpak:
+    name:
+      - com.example.app_role
+    state: present
+    remote: flathub
+    
+- name: "{{ ansible_facts['distribution'] }} | [COPR] Enable User/app_role"
+  community.general.copr:
+    host: copr.fedorainfracloud.org
+    state: enabled
+    name: user/app_role
+  become: true

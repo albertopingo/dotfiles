@@ -16,6 +16,7 @@
       - apparmor
     state: present
   become: true
+  register: apparmor_installed
 
 - name: "{{ ansible_facts['distribution'] }} | Enable AppArmor service"
   ansible.builtin.systemd:
@@ -23,6 +24,7 @@
     enabled: true
     state: started
   become: true
+  when: apparmor_installed.changed
 
 - name: "{{ ansible_facts['distribution'] }} | Check if LSM parameters already set"
   ansible.builtin.lineinfile:

@@ -2,10 +2,10 @@
 aur_helper: yay
 
 default_roles:
-# Package Managers
+  # Package Managers
   - pkg_managers
 
-# System
+  # System
   - security
   - snapshots
   - gpu
@@ -14,34 +14,40 @@ default_roles:
   - shell
   - display_manager
 
-# Desktop Environment
+  # Desktop Environment
   - assets
   - gtk_qt
   - niri
   - quickshell
   # - wezterm
   - alacritty
+  - screenshots
   - normcap
   - walker
+  - mpv
+  - imv
+  - sublime-text
+  - gnome-text-editor
 
-# TUI applications
+  # TUI applications
   - tmux
   - neovim
   - yazi
   - opencode
   - ytdlp
 
-# GUI applications
+  # GUI applications
   - browsers
   - obs
   - stremio
   - vscode
   - obsidian
   - nautilus
+  - virtual_machines
 
-# Services
+  # Services
   - docker
   - searxng
 
-# After roles
+  # After roles
   - desktop_entries
