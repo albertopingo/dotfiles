@@ -20,3 +20,29 @@
     state: present
   become: true
 
+- name: "{{ ansible_facts['distribution'] }} | [AUR] Install nautilus-open-any-terminal"
+  kewlfft.aur.aur:
+    use: "{{ aur_helper }}"
+    name: nautilus-open-any-terminal
+    state: present
+  become: true
+  become_user: aur_builder
+
+# https://github.com/Stunkymonkey/nautilus-open-any-terminal
+- name: "{{ ansible_facts['distribution'] }} | Set Nautilus-open-any-terminal keybinding"
+  community.general.dconf:
+    key: "/com/github/stunkymonkey/nautilus-open-any-terminal/keybindings"
+    value: "'<Ctrl><Alt>t'"
+    state: present
+
+- name: "{{ ansible_facts['distribution'] }} | Set Nautilus-open-any-terminal new-tab"
+  community.general.dconf:
+    key: "/com/github/stunkymonkey/nautilus-open-any-terminal/new-tab"
+    value: "true"
+    state: present
+
+# - name: "{{ ansible_facts['distribution'] }} | Set Nautilus-open-any-terminal flatpak"
+#   community.general.dconf:
+#     key: "/com/github/stunkymonkey/nautilus-open-any-terminal/flatpak"
+#     value: "'system'"
+#     state: present

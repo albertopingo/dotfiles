@@ -5,3 +5,9 @@
       - alacritty
     state: present
   become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Set Nautilus-open-any-terminal default terminal"
+  community.general.dconf:
+    key: "/com/github/stunkymonkey/nautilus-open-any-terminal/terminal"
+    value: "'alacritty'"
+    state: present
