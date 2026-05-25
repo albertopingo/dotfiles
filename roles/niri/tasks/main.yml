@@ -12,19 +12,6 @@
   ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
   vars:
     app_name: Niri
-    src_subpath: niri
     dest_path: "{{ ansible_facts['user_dir'] }}/.config/niri"
 
-- name: "Deploy Hyprpaper config symlink"
-  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
-  vars:
-    app_name: Hyprpaper
-    src_subpath: hypr
-    dest_path: "{{ ansible_facts['user_dir'] }}/.config/hypr"
 
-- name: "Deploy Swappy config symlink"
-  ansible.builtin.include_tasks: "{{ playbook_dir }}/tasks/deploy_config.yml"
-  vars:
-    app_name: Swappy 
-    src_subpath: config
-    dest_path: "{{ ansible_facts['user_dir'] }}/.config/swappy/config"

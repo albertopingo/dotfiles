@@ -8,7 +8,6 @@
       - org.freedesktop.secrets
       - mako
       - fuzzel
-      - hyprpaper
       - libsecret
       - gnome-keyring
       - seahorse
