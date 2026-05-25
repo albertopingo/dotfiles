@@ -1,0 +1,11 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install Screenshot packages"
+  community.general.pacman:
+    name:
+      # Screenshot tool with annotations
+      - swappy 
+      - grim
+      - slurp
+    state: present
+  become: true
+
