@@ -1,0 +1,3 @@
+workspace "obs" {
+    open-on-output "DP-3"
+}
