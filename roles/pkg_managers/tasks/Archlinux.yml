@@ -6,18 +6,16 @@
 - name: "{{ ansible_facts['distribution'] }} | Pacman Config - Enable multilib repository"
   ansible.builtin.replace:
     path: /etc/pacman.conf
-    regexp: '^#\[multilib\]'
-    replace: '[multilib]'
+    regexp: '^#(\[multilib\])'
+    replace: '\1'
   become: true
   register: multilib_section
 
 - name: "{{ ansible_facts['distribution'] }} | Pacman Config - Enable multilib repository mirrorlist"
-  ansible.builtin.lineinfile:
+  ansible.builtin.replace:
     path: /etc/pacman.conf
-    insertafter: '^\[multilib\]'
-    regexp: '^#Include = /etc/pacman.d/mirrorlist'
-    line: 'Include = /etc/pacman.d/mirrorlist'
-    state: present
+    regexp: '^(\[multilib\]\n)#(Include = /etc/pacman.d/mirrorlist)'
+    replace: '\1\2'
   become: true
 
 - name: "{{ ansible_facts['distribution'] }} | Update pacman database after enabling multilib"
