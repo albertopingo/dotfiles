@@ -1,28 +1,68 @@
 ---
-- name: "{{ ansible_facts['distribution'] }} | Install app_role"
+- name: "{{ ansible_facts['distribution'] }} | Install Virt"
   community.general.pacman:
     name:
-      - app_role
+      - qemu-full
+      # Libvirt
+      - libvirt
+      - dnsmasq
+      # GUI
+      - virt-manager
+      - dmidecode
     state: present
   become: true
 
-- name: "{{ ansible_facts['distribution'] }} | Install app_role optional dependencies"
-  community.general.pacman:
-    name:
-      - dependency1
-    state: present
+- name: "{{ ansible_facts['distribution'] }} | Add user to libvirt group"
+  ansible.builtin.user:
+    name: "{{ ansible_facts['user_id'] }}"
+    groups: libvirt
+    append: true
   become: true
 
-- name: "{{ ansible_facts['distribution'] }} | [AUR] Install app_role"
-  kewlfft.aur.aur:
-    use: "{{ aur_helper }}"
-    name: app_role
-    state: present
-  become: true
-  become_user: aur_builder
+# - name: "{{ ansible_facts['distribution'] }} | Check CPU virtualization support"
+#   ansible.builtin.shell: "set -o pipefail && grep -E 'vmx|svm|0xc0f' /proc/cpuinfo"
+#   register: virtual_machines_cpu_virt
+#   failed_when: false
+#   changed_when: false
+#
+# - name: "{{ ansible_facts['distribution'] }} | Determine KVM module (AMD vs Intel)"
+#   ansible.builtin.set_fact:
+#     virtual_machines_kvm_module: "{{ 'kvm_amd' if 'svm' in virtual_machines_cpu_virt.stdout else 'kvm_intel' }}"
+#   when: virtual_machines_cpu_virt.rc == 0
+#
+# - name: "{{ ansible_facts['distribution'] }} | Load KVM modules"
+#   community.general.modprobe:
+#     name: "{{ item }}"
+#     state: present
+#   loop:
+#     - kvm
+#     - "{{ virtual_machines_kvm_module }}"
+#   when: virtual_machines_cpu_virt.rc == 0
+#   become: true
+#
+# - name: "{{ ansible_facts['distribution'] }} | Persist KVM modules on reboot"
+#   ansible.builtin.copy:
+#     content: |
+#       kvm
+#       {{ virtual_machines_kvm_module }}
+#     dest: /etc/modules-load.d/kvm.conf
+#     mode: '0644'
+#   become: true
+#   when: virtual_machines_cpu_virt.rc == 0
 
-- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install app_role"
-  community.general.flatpak:
-    name: com.example.app_role
-    state: present
-    remote: flathub
+- name: "{{ ansible_facts['distribution'] }} | Enable and start libvirtd and virtlogd services"
+  ansible.builtin.systemd_service:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop:
+    - libvirtd.service
+    - virtlogd.service
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Configure libvirt default network"
+  community.libvirt.virt_net:
+    name: default
+    state: active
+    autostart: true
+  become: true

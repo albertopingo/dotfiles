@@ -21,14 +21,15 @@ return {
 				toml = { "taplo" },
 				-- Others
 				bash = { "shfmt" },
+				nix = { "nixfmt" },
 			},
-			format_on_save = {
-				timeout_ms = 5000,
-				lsp_format = "fallback",
-			},
+			-- format_on_save = {
+			-- 	timeout_ms = 5000,
+			-- 	lsp_format = "fallback",
+			-- },
 		})
 
-		vim.keymap.set("n", "<leader>f", function()
+		vim.keymap.set("n", "<leader>fd", function()
 			require("conform").format({ bufnr = 0 })
 		end)
 	end,

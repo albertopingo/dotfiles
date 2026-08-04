@@ -1,3 +1,12 @@
+workspace "browser" {
+    open-on-output "DP-3"
+}
+
+workspace "notes" {
+    open-on-output "DP-3"
+}
+
+
 workspace "obs" {
     open-on-output "DP-3"
 }

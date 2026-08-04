@@ -15,7 +15,7 @@ gestures {
 spawn-at-startup "quickshell"
 spawn-at-startup "xwayland-satellite"
 
-spawn-at-startup "hyprpaper"
+// spawn-at-startup "hyprpaper"
 
 //spawn-at-startup "elephant"
 //spawn-at-startup "walker" "--gapplication-service"
