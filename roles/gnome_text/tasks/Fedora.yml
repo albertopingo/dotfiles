@@ -1,0 +1,15 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Install Gnome Text Editor"
+  ansible.builtin.dnf5:
+    name:
+      - gnome-text-editor
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Set VISUAL editor in /etc/environment"
+  ansible.builtin.lineinfile:
+    path: /etc/environment
+    regexp: "^VISUAL="
+    line: "VISUAL=gnome-text-editor"
+    mode: '0644'
+  become: true

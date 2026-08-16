@@ -19,10 +19,27 @@
     name:
       - niri
       - xwayland-satellite
-      - mako
       - hyprpaper
       - swappy 
       - grim
       - slurp
     state: present
   become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Add Terra repository"
+  ansible.builtin.yum_repository:
+    name: terra
+    description: Terra Repository
+    baseurl: https://repos.fyralabs.com/terra$releasever
+    enabled: true
+    gpgcheck: false
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Install Terra release package"
+  ansible.builtin.dnf5:
+    name:
+      - terra-release
+      - noctalia-shell
+    state: present
+  become: true
+

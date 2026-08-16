@@ -1,7 +1,7 @@
 ---
-- name: "{{ ansible_facts['distribution'] }} | Install OBS Studio"
-  ansible.builtin.dnf5:
+- name: "{{ ansible_facts['distribution'] }} | [Flatpak] Install OBS Studio"
+  community.general.flatpak:
     name:
-      - obs-studio
+      - com.obsproject.Studio
     state: present
-  become: true
+    remote: flathub

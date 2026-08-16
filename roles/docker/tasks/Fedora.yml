@@ -1,0 +1,41 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | Add Docker Repos"
+  ansible.builtin.yum_repository:
+    name: docker
+    description: Docker CE Stable
+    baseurl: https://download.docker.com/linux/fedora/docker-ce.repo
+
+- name: "{{ ansible_facts['distribution'] }} | Install Docker"
+  ansible.builtin.dnf5:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+  become: true
+  register: docker_installed
+
+- name: "{{ ansible_facts['distribution'] }} | Enable service"
+  ansible.builtin.systemd:
+    name: docker.service
+    enabled: true
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Start service"
+  ansible.builtin.systemd:
+    name: docker.service
+    state: started
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Add user to docker group"
+  ansible.builtin.user:
+    name: "{{ ansible_facts['user_id'] }}"
+    groups: docker
+    append: true
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Refresh group membership"
+  ansible.builtin.command: newgrp docker
+  when: docker_installed.changed

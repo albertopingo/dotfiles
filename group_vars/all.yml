@@ -18,7 +18,7 @@ default_roles:
   - assets
   - gtk_qt
   - niri
-  - quickshell
+  # - quickshell
   # - wezterm
   - alacritty
   - screenshots
@@ -33,7 +33,7 @@ default_roles:
   - tmux
   - neovim
   - yazi
-  - opencode
+  # - opencode
   - ytdlp
 
   # GUI applications
