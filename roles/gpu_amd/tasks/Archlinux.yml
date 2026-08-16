@@ -1,0 +1,24 @@
+---
+# RDNA4 (RX 9070XT) is supported by the in-tree amdgpu driver — no DKMS,
+# no AUR package, no legacy SI/CIK module parameters (those only apply to
+# 2012-2013 era GCN 1/2 cards). Wayland talks to amdgpu via DRM/KMS directly,
+# so no Xorg DDX driver (xf86-video-amdgpu) or xorg.conf.d tuning is needed.
+- name: "{{ ansible_facts['distribution'] }} | Install AMD GPU packages (Wayland)"
+  community.general.pacman:
+    name:
+      - mesa            # DRI driver (3D) + VA-API/VDPAU (video accel) — both bundled in mesa now
+      - lib32-mesa       # 32-bit support (Proton/Steam)
+      - vulkan-radeon
+      - lib32-vulkan-radeon
+      - linux-firmware-amdgpu  # required for the driver to recognize/boot new hardware
+      # Utility GPU packages
+      - nvtop
+      - lact
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Enable lactd service (GPU control daemon)"
+  ansible.builtin.systemd:
+    name: lactd.service
+    enabled: true
+  become: true
