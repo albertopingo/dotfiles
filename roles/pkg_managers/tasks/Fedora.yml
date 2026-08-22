@@ -1,0 +1,111 @@
+---
+# -------------------------------
+#   Pacman
+# -------------------------------
+
+#- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Enable multilib repository"
+#  ansible.builtin.replace:
+#    path: /etc/pacman.conf
+#    regexp: '^#(\[multilib\])'
+#    replace: '\1'
+#  become: true
+#  register: multilib_section
+#
+#- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Enable multilib repository mirrorlist"
+#  ansible.builtin.replace:
+#    path: /etc/pacman.conf
+#    regexp: '^(\[multilib\]\n)#(Include = /etc/pacman.d/mirrorlist)'
+#    replace: '\1\2'
+#  become: true
+#
+#- name: "{{ ansible_facts['distribution'] }} | Update pacman database after enabling multilib"
+#  ansible.builtin.shell: pacman -Sy --noconfirm
+#  become: true
+#  when: multilib_section.changed
+#
+#- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Set Parallel downloads to 10"
+#  ansible.builtin.replace:
+#    path: /etc/pacman.conf
+#    regexp: '^#?ParallelDownloads = \d+$'
+#    replace: 'ParallelDownloads = 10'
+#  become: true
+#
+#- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Uncomment Color option"
+#  ansible.builtin.replace:
+#    path: /etc/pacman.conf
+#    regexp: '^#?Color$'
+#    replace: 'Color'
+#    backup: yes
+#  become: true
+#
+#- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Uncomment VerbosePkgLists option"
+#  ansible.builtin.replace:
+#    path: /etc/pacman.conf
+#    regexp: '^#?VerbosePkgLists$'
+#    replace: 'VerbosePkgLists'
+#  become: true
+#
+#- name: "{{ ansible_facts['distribution'] }} | Pacman Config - Add ILoveCandy option"
+#  ansible.builtin.lineinfile:
+#    path: /etc/pacman.conf
+#    insertafter: '^Color$'
+#    line: 'ILoveCandy'
+#    state: present
+#  become: true
+#
+## - name: "{{ ansible_facts['distribution'] }} | [AUR] Install rate-mirrors"
+##   kewlfft.aur.aur:
+##     use: "{{ aur_helper }}"
+##     name: rate-mirrors-bin
+##     state: present
+##   become: true
+##   become_user: aur_builder
+##   register: rate_mirrors_install
+#
+## - name: "{{ ansible_facts['distribution'] }} | Backup Pacman Mirrorlist"
+##   ansible.builtin.copy:
+##     src: /etc/pacman.d/mirrorlist
+##     dest: /etc/pacman.d/mirrorlist.backup
+##     backup: yes
+##   become: true
+##   when: rate_mirrors_install.changed
+#
+## - name: "{{ ansible_facts['distribution'] }} | Optimize Pacman Mirrors"
+##   ansible.builtin.command:
+##     cmd: rate-mirrors --allow-root --protocol https arch | grep -v '^#' | sudo tee /etc/pacman.d/mirrorlist
+##   become: true
+##   when: rate_mirrors_install.changed
+#
+## -------------------------------
+##   Flatpak
+## -------------------------------
+#- name: "{{ ansible_facts['distribution'] }} | Install Flatpak"
+#  community.general.pacman:
+#    name:
+#      - flatpak
+#    state: present
+#  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Add the Flathub repositories"
+  community.general.flatpak_remote:
+    name: "{{ item }}"
+    state: present
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+    method: system
+  register: flatpak_repos
+  loop:
+    - flathub
+    - flathub-unverified
+  become: true
+
+  # flatpak remote-modify --subset=verified flathub
+- name: "{{ ansible_facts['distribution'] }} | Modify Flathub repository to verified only apps"
+  ansible.builtin.command:
+    cmd: flatpak remote-modify --subset=verified flathub
+  when: flatpak_repos.changed
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | Update flatpak application database"
+  ansible.builtin.command:
+    cmd: flatpak update --appstream
+  when: flatpak_repos.changed

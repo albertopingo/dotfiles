@@ -4,6 +4,7 @@
     name: docker
     description: Docker CE Stable
     baseurl: https://download.docker.com/linux/fedora/docker-ce.repo
+  become: true
 
 - name: "{{ ansible_facts['distribution'] }} | Install Docker"
   ansible.builtin.dnf5:

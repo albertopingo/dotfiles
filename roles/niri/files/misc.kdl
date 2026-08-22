@@ -12,7 +12,7 @@ gestures {
     }
 }
 
-spawn-at-startup "quickshell"
+spawn-at-startup "noctalia"
 spawn-at-startup "xwayland-satellite"
 
 // spawn-at-startup "hyprpaper"
